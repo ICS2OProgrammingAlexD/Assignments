@@ -50,7 +50,7 @@ local gameOverMusicChannel
 local function AskQuestion()
 	randomNumber1 = math.random (1, 10)
 	randomNumber2 = math.random (1, 10)
-	randomOperator = math.random (1, 7)
+	randomOperator = math.random (1, 6)
 	-- if randomOperator == 1 do addition
 	if (randomOperator == 1) then
 		-- set correct answer
@@ -92,12 +92,41 @@ local function AskQuestion()
 		randomNumber1 = math.random(1, 5)
 		randomNumber2 = math.random(1, 5)
 
+		questionObject.text = randomNumber1 .. "^" .. randomNumber2 .. "="
+		if (randomNumber2 == 1) then
+			correctAnswer = randomNumber1 * 1
+		elseif (randomNumber2 == 2) then 
+			correctAnswer = randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 3) then
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 4) then
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 5) then 
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
+		end
+
 	--if randomOperator == 6 then do factorial	
 	elseif (randomOperator == 6) then
 		randomNumber1 = math.random(1, 7)
+		questionObject = randomNumber1 .. "!" .. "="
+
+		if (randomNumber1 == 1) then
+			correctAnswer = 1 
+		elseif (randomNumber1 == 2) then 
+			correctAnswer = 2 * 1
+		elseif (randomNumber1 == 3) then
+			correctAnswer = 3 * 2 * 1
+		elseif (randomNumber1 == 4) then
+			correctAnswer = 4 * 3 * 2 * 1
+		elseif (randomNumber1 == 5) then
+			correctAnswer = 5 * 4 * 3 * 2 * 1
+		elseif (randomNumber1 == 6) then 
+			correctAnswer = 6 * 5 * 4 * 3 * 2 * 1
+		elseif (randomNumber1 == 7) then
+			correctAnswer = 7 * 6 * 5 * 4 * 3 * 2 * 1
+		end
+
 	-- if randomOperator == 7 then do square root
-	elseif (randomOperator == 7) then	
-		randomNumber1 = math.random(1, 100)
 	end
 end
 
