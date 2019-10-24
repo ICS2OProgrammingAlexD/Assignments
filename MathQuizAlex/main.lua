@@ -1,5 +1,4 @@
-
--- hide the status bar 
+		-- hide the status bar 
 display.setStatusBar (display.HiddenStatusBar)
 
 -- set background color
@@ -38,9 +37,9 @@ local totalSeconds = 11
 local secondsLeft = 10
 local clockText
 local countDownTimer
-local youWinMusic = audio.loadStream ("Sounds/formula-1-theme-song.mp3")
+local youWinMusic = audio.loadStream ("Sounds/TaDa.mp3")
 local youWinMusicChannel
-local gameOverMusic = audio.loadStream("Sounds/Effect Womp Womp Womp.mp3")
+local gameOverMusic = audio.loadStream("Sounds/GameOver.mp3")
 local gameOverMusicChannel
 
 -----------------------------------------------------------------
@@ -48,8 +47,8 @@ local gameOverMusicChannel
 ---------------------------------------------------------------
  
 local function AskQuestion()
-	randomNumber1 = math.random (1, 10)
-	randomNumber2 = math.random (1, 10)
+	randomNumber1 = math.random (1, 20)
+	randomNumber2 = math.random (1, 20)
 	randomOperator = math.random (1, 6)
 	-- if randomOperator == 1 do addition
 	if (randomOperator == 1) then
@@ -60,6 +59,8 @@ local function AskQuestion()
 		questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " ="
 	-- if randomOperator == 2 then do multiplication
 	elseif (randomOperator == 2) then
+		randomNumber1 = math.random(1, 10)
+		randomNumber2 = math.random(1, 10)
 		-- set correctAnswer
 		correctAnswer = randomNumber1 * randomNumber2
 
@@ -82,33 +83,17 @@ local function AskQuestion()
 		end
 	-- if randomOperator == 4 then do division
 	elseif (randomOperator == 4) then
+		randomNumber1 = math.random(1, 10)
+		randomNumber2 = math.random(1, 10)
 		-- set divMulAns and correctAnswer
 		divMulAns = randomNumber1 * randomNumber2
 		correctAnswer = divMulAns / randomNumber1
 		-- set questionObject
 		questionObject.text = divMulAns .. " / " .. randomNumber1 .. " ="
-	-- if randomOperator == 5 then do squared
+	-- if randomOperator == 5
 	elseif (randomOperator == 5) then
-		randomNumber1 = math.random(1, 5)
-		randomNumber2 = math.random(1, 5)
-
-		questionObject.text = randomNumber1 .. "^" .. randomNumber2 .. "="
-		if (randomNumber2 == 1) then
-			correctAnswer = randomNumber1 * 1
-		elseif (randomNumber2 == 2) then 
-			correctAnswer = randomNumber1 * randomNumber1
-		elseif (randomNumber2 == 3) then
-			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1
-		elseif (randomNumber2 == 4) then
-			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
-		elseif (randomNumber2 == 5) then 
-			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
-		end
-
-	--if randomOperator == 6 then do factorial	
-	elseif (randomOperator == 6) then
 		randomNumber1 = math.random(1, 7)
-		questionObject = randomNumber1 .. "!" .. "="
+		questionObject.text = randomNumber1 .. "!" .. "="
 
 		if (randomNumber1 == 1) then
 			correctAnswer = 1 
@@ -124,9 +109,23 @@ local function AskQuestion()
 			correctAnswer = 6 * 5 * 4 * 3 * 2 * 1
 		elseif (randomNumber1 == 7) then
 			correctAnswer = 7 * 6 * 5 * 4 * 3 * 2 * 1
-		end
-
-	-- if randomOperator == 7 then do square root
+		end	
+		-- if randomOperator == 6 then do powers
+	elseif(randomOperator == 6) then
+		randomNumber1 = math.random(1,5)
+		randomNumber2 = math.random(1,5)
+		questionObject.text = randomNumber1 .. " ^" .. randomNumber2 .. " ="
+		if (randomNumber2 == 1) then
+			correctAnswer = randomNumber1
+		elseif (randomNumber2 == 2) then
+			correctAnswer = randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 3) then
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 4) then
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
+		elseif (randomNumber2 == 5) then
+			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
+		end 	
 	end
 end
 
@@ -136,7 +135,7 @@ local function HideCorrect()
 end
 
 local function PlayYouWinMusic(  )
-	youWinMusicChannel = audio.play (youWinMusic, {loops= -1})
+	youWinMusicChannel = audio.play (youWinMusic, {loops= 0})
 end
 
 local function PlayGameOverMusic(  )
@@ -248,6 +247,7 @@ local function NumericFieldListener( event )
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
+				audio.play(buzzSound)
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 2) then
@@ -255,6 +255,7 @@ local function NumericFieldListener( event )
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
+				audio.play(buzzSound)
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 1) then
@@ -262,6 +263,7 @@ local function NumericFieldListener( event )
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
+				audio.play(buzzSound)
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 0) then
@@ -314,10 +316,10 @@ redX.y = display.contentHeight/3
 redX.isVisible = false
 
 -- create audio for correctObject
-dingSound = audio.loadSound ("Sounds/Correct Answer Sound Effect.mp3")
+dingSound = audio.loadSound ("Sounds/ding.mp3")
 
 --create audio for incorrect object 
-buzzSound = audio.loadSound ("Sounds/Wrong Buzzer Sound Effect.mp3")
+buzzSound = audio.loadSound ("Sounds/buzzer.mp3")
 
 -- create heart1
 heart1 = display.newImageRect("Images/heart.png", 150, 150)
@@ -378,3 +380,4 @@ numericField:addEventListener ("userInput", NumericFieldListener)
 -- call the function to ask question
 AskQuestion()
 StartTimer()
+
