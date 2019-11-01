@@ -1,4 +1,11 @@
-		-- hide the status bar 
+-- Title: Math Quiz
+-- Name: Alex De Meo 
+-- Class: ICS2O
+-- Description: displays a random math question on-screen. If user answers correctly 
+--then they get a point, if they answer incorrectly then they lose a can of coke
+
+
+-- hide the status bar 
 display.setStatusBar (display.HiddenStatusBar)
 
 -- set background color
@@ -29,10 +36,10 @@ local livesCount
 local lives = 4
 local youWin
 local gameOver
-local heart1
-local heart2
-local heart3
-local heart4
+local coke1
+local coke2
+local coke3
+local coke4
 local totalSeconds = 11
 local secondsLeft = 10
 local clockText
@@ -41,6 +48,8 @@ local youWinMusic = audio.loadStream ("Sounds/TaDa.mp3")
 local youWinMusicChannel
 local gameOverMusic = audio.loadStream("Sounds/GameOver.mp3")
 local gameOverMusicChannel
+local squareRoot
+local scrollSpeed = 4
 
 -----------------------------------------------------------------
 -- local functions
@@ -49,7 +58,7 @@ local gameOverMusicChannel
 local function AskQuestion()
 	randomNumber1 = math.random (1, 20)
 	randomNumber2 = math.random (1, 20)
-	randomOperator = math.random (1, 6)
+	randomOperator = math.random (1, 7)
 	-- if randomOperator == 1 do addition
 	if (randomOperator == 1) then
 		-- set correct answer
@@ -126,6 +135,12 @@ local function AskQuestion()
 		elseif (randomNumber2 == 5) then
 			correctAnswer = randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1 * randomNumber1
 		end 	
+	-- if randomOperator == 7 then do square root	
+	elseif (randomOperator == 7) then
+		randomNumber1 = math.random(1, 10)
+		squareRoot = randomNumber1 * randomNumber1
+		questionObject.text = "√" .. squareRoot
+		correctAnswer = squareRoot / randomNumber1
 	end
 end
 
@@ -173,19 +188,19 @@ local function UpdateTime(  )
 
 		-- If no lives left, play a game over sound,
 		-- show a Game over Image, nd cancel the timer , 
-		-- remove hearts
+		-- remove cokes
 
 		if ( lives == 3 ) then
-			heart4.isVisible = false
+			coke4.isVisible = false
 			audio.play(buzzSound)
 		elseif (lives == 2) then
-			heart3.isVisible = false
+			coke3.isVisible = false
 			audio.play(buzzSound)
 		elseif (lives == 1) then
-			heart2.isVisible = false
+			coke2.isVisible = false
 			audio.play(buzzSound)			
 		elseif (lives == 0) then
-			heart1.isVisible = false
+			coke1.isVisible = false
 			gameOver.isVisible = true
 			pointsCount.isVisible = false
 			numericField.isVisible = false
@@ -224,10 +239,10 @@ local function NumericFieldListener( event )
 				pointsCount.isVisible = false
 				timer.cancel(countDownTimer)
 				clockText.isVisible = false
-				heart1.isVisible = false
-				heart2.isVisible = false
-				heart3.isVisible = false
-				heart4.isVisible = false
+				coke1.isVisible = false
+				coke2.isVisible = false
+				coke3.isVisible = false
+				coke4.isVisible = false
 				PlayYouWinMusic()
 			else
 				points = points + 1 
@@ -243,7 +258,7 @@ local function NumericFieldListener( event )
 		else
 			lives = lives - 1
 			if (lives == 3 ) then
-				heart4.isVisible = false
+				coke4.isVisible = false
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
@@ -251,7 +266,7 @@ local function NumericFieldListener( event )
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 2) then
-				heart3.isVisible = false
+				coke3.isVisible = false
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
@@ -259,7 +274,7 @@ local function NumericFieldListener( event )
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 1) then
-				heart2.isVisible = false
+				coke2.isVisible = false
 				incorrectObject.text = "         Not Quite, \n the right answer is " .. correctAnswer
 				incorrectObject.isVisible = true
 				redX.isVisible = true
@@ -267,7 +282,7 @@ local function NumericFieldListener( event )
 				timer.performWithDelay (2000, HideIncorrect)
 				timer.performWithDelay (2000, HideRedX)
 			elseif (lives == 0) then
-				heart1.isVisible = false
+				coke1.isVisible = false
 				gameOver.isVisible = true
 				numericField.isVisible = false
 				questionObject.isVisible = false
@@ -285,6 +300,17 @@ local function NumericFieldListener( event )
 	end 	
 end
 
+local function MoveEndImages( event )
+	youWin.x = youWin.x - scrollSpeed
+	gameOver.x = gameOver.x - scrollSpeed
+
+	if (youWin.x < -200) then
+		youWin.x = 1224
+	end
+	if (gameOver.x < -200) then
+		gameOver.x = 1224
+	end
+end
 --------------------------------------------------------------------
 -- Object Creation
 --------------------------------------------------------------------
@@ -321,35 +347,37 @@ dingSound = audio.loadSound ("Sounds/ding.mp3")
 --create audio for incorrect object 
 buzzSound = audio.loadSound ("Sounds/buzzer.mp3")
 
--- create heart1
-heart1 = display.newImageRect("Images/heart.png", 150, 150)
-heart1.x = 900
-heart1.y = 100
-heart1.isVisible = true
+-- create coke1
+coke1 = display.newImageRect("Images/coke.png", 150, 150)
+coke1.x = 900
+coke1.y = 100
+coke1.isVisible = true
 
---create heart2 
-heart2 = display.newImageRect("Images/heart.png", 150, 150)
-heart2.x = 740
-heart2.y = 100
-heart2.isVisible = true
+--create coke2 
+coke2 = display.newImageRect("Images/coke.png", 150, 150)
+coke2.x = 740
+coke2.y = 100
+coke2.isVisible = true
 
---create heart3
-heart3 = display.newImageRect("Images/heart.png", 150, 150)
-heart3.x = 580
-heart3.y = 100
-heart3.isVisible = true
+--create coke3
+coke3 = display.newImageRect("Images/coke.png", 150, 150)
+coke3.x = 580
+coke3.y = 100
+coke3.isVisible = true
 
--- create heart4
-heart4 = display.newImageRect("Images/heart.png", 150, 150)
-heart4.x = 420
-heart4.y = 100
-heart4.isVisible = true
+-- create coke4
+coke4 = display.newImageRect("Images/coke.png", 150, 150)
+coke4.x = 420
+coke4.y = 100
+coke4.isVisible = true
 
 -- create YouWin Image
 youWin = display.newImageRect ("Images/You Win.png", 1000, 500)
 youWin.x = display.contentWidth/2
 youWin.y = display.contentHeight/2
 youWin.isVisible = false
+-- addEventListener for End Images
+Runtime:addEventListener("enterFrame", MoveEndImages)
 
 -- create gameOver Image
 gameOver = display.newImageRect ("Images/GameOver.png", 1000, 700)
