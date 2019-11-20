@@ -44,6 +44,7 @@ local creditsScrollSpeed = 10
 local creditsScrollSpeed2 = 5
 local playScrollSpeed = 10
 local playScrollSpeed2 = 10
+local moveToPosition = false
 
 
 -----------------------------------------------------------------------------------------
@@ -69,32 +70,32 @@ end
 
 -- this function move the buttons into position
 local function MoveButtons()
-    instructionsButton.x = instructionsButton.x + instructionsScrollSpeed
-    creditsButton.x = creditsButton.x + creditsScrollSpeed
-    playButton.x = playButton.x + playScrollSpeed
-    -- stops the buttons from moving offscreen, and moves them either up or down
-    if (instructionsButton.x > display.contentWidth*8/10)then
-        instructionsScrollSpeed = 0
-        creditsScrollSpeed = 0
-        playScrollSpeed = 0
+     -- moves buttons right
+    if (instructionsButton.x < display.contentWidth*8/10) then       
+        instructionsButton.x = instructionsButton.x + instructionsScrollSpeed
+        creditsButton.x = creditsButton.x + creditsScrollSpeed
+        playButton.x = playButton.x + playScrollSpeed
+    else
+        -- move buttons up
         instructionsButton.y = instructionsButton.y - instructionsScrollSpeed2
         creditsButton.y = creditsButton.y + creditsScrollSpeed2
         playButton.y = playButton.y + playScrollSpeed2
+
         -- stop the instructions Buttons from moving off screen
         if (instructionsButton.y < display.contentHeight*2/5) then
-            instructionsScrollSpeed2 = 0
+        instructionsScrollSpeed2 = 0
         end
         -- stops the credits buttons from moving off screen
         if (creditsButton.y > display.contentHeight*3/5) then
-            creditsScrollSpeed2 = 0
+        creditsScrollSpeed2 = 0
         end
         -- stops the play buttons from moving off screen
         if (playButton.y > display.contentHeight*4/5) then
-            playScrollSpeed2 = 0
+        playScrollSpeed2 = 0
         end
     end
-
 end
+
 
 
 
@@ -119,12 +120,6 @@ function scene:create( event )
     bkg_image.width = display.contentWidth
     bkg_image.height = display.contentHeight
 
-
-    -- Associating display objects with this scene 
-    sceneGroup:insert( bkg_image )
-
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
 
     -----------------------------------------------------------------------------------------
     -- BUTTON WIDGETS
@@ -185,10 +180,12 @@ function scene:create( event )
           overFile = "Images/InstructionsButtonPressedAlex@2x.png",
 
           -- when button is released, call the instructions transition function  
-          onRelease = InstructionsTransition} )
+          onRelease = InstructionsTransition
+      } )
     -----------------------------------------------------------------------------------------
 
     -- Associating button widgets with this scene
+    sceneGroup:insert( bkg_image )
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
     sceneGroup:insert( instructionsButton)
@@ -223,7 +220,7 @@ function scene:show( event )
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
-        MoveButtons()
+        Runtime:addEventListener("enterFrame", MoveButtons)
 
     end
 
@@ -252,6 +249,7 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+        Runtime:removeEventListener("enterFrame", MoveButtons)
     end
 
 end -- function scene:hide( event )

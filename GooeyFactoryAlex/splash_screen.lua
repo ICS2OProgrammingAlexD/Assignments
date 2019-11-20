@@ -20,12 +20,18 @@ local scene = composer.newScene( sceneName )
 
 -- get rid of status bar 
 display.setStatusBar(display.HiddenStatusBar)
+
 --------------------------------------------------------
 -- LOCAL VARIABLES
 --------------------------------------------------------------
 local companyLogo
 local companyLogo2
 local scrollSpeed = 5
+
+--------------------------------------------------------
+-- LOCAL SOUNDS
+--------------------------------------------------------------
+
 local splashScreenSound = audio.loadStream("Sounds/Intro.mp3")
 local splashScreenSoundChannel
 
@@ -50,7 +56,7 @@ local function LogoFadeInOut(  )
     end
 end
 --this function allows the logo to drop from the top of the screen
-local function DropLogo(  )
+local function DropLogo(event)
 	if (companyLogo.y > display.contentHeight/2) then
         --stop the company logo from dropping 
 		scrollSpeed = 0
@@ -124,7 +130,9 @@ function scene:hide( event )
 	--------------------------------------------------
 	elseif (phase == "did") then
 		-- stop the sound 
-        splashScreenSoundChannel = audio.pause(splashScreenSound)
+        --splashScreenSoundChannel = audio.stop(splashScreenSound)
+        -- Remove event listener
+        Runtime:removeEventListener("enterFrame", DropLogo)
 	end
 end
 
