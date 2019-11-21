@@ -2,7 +2,7 @@
 -- splash_screen.lua
 -- Created by: Alex De Meo
 -- Date: Nov. 4, 2019
--- Description: This is the splash screen for the app
+-- Description: This is the splash screen for my CPT app (Gooey Factory)
 ------------------------------------------------------------------
 
 -------------------------------------------------------------------

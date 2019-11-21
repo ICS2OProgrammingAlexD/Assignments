@@ -1,20 +1,41 @@
+-- Title: level1_screen.lua
+-- Created by: Alex De Meo
+-- Date: Nov. 20, 2019
+-- Description: This is the level 1 of my CPT app "Gooey Factory".
+
 -- Use Composer Library 
 local composer = require("composer")
 
+-- Use widget Library
+local widget = require("widget")
+
 -- Name the Scene Object
 sceneName = "level1_screen"
-
 ----------------------------------------------------------------------------
+
 local scene = composer.newScene( sceneName )
 
 -- get rid of status bar 
 display.setStatusBar(display.HiddenStatusBar)
 
+----------------------------------------------------------------------------
+--LOCAL VARIABLES
+----------------------------------------------------------------------------
+local bkgImage
+
+----------------------------------------------------------------------------
+--LOCAL FUNCTIONS
+----------------------------------------------------------------------------
+
 
 function scene:create( event )
 	local sceneGroup = self.view
 
-	display.setDefault("background", 1, 1, 1)
+	bkgImage = display.newImage("Images/IMG_1803.JPG")
+	bkgImage.width = display.contentWidth
+	bkgImage.height = display.contentHeight
+	bkgImage.x = display.contentWidth/2
+	bkgImage.y = display.contentHeight/2
 end
 
 -- the function is called when the scene is still off screen (but is about to come on screen)

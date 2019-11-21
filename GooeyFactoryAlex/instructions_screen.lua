@@ -1,11 +1,14 @@
---Title: main_menu.lua
+-- Title: instructions_screen.lua
 -- Created by: Alex De Meo
--- Date: Nov. 6
--- Description: This is the main menu (It is only here because I need to switch scenes 
---so that Miss Raffin can see when the splash screen ends)
+-- Date: Nov. 19
+-- Description: This is the instructions screen. From the instructions that our
+-- group of grade 3s, this is where you will learn how to play.
 
 -- Use composer library
 local composer = require("composer")
+
+-- Use widget Library 
+local widget = require( "widget" )
 
 -- Name the Scene Object
 sceneName = "instructions_screen"
@@ -15,16 +18,49 @@ local scene = composer.newScene( sceneName )
 
 -- get rid of status bar 
 display.setStatusBar(display.HiddenStatusBar)
+
+------------------------------------------------------------------------
+--LOCAL VARIABLES
+----------------------------------------------------------------------
+local bkgImage
+local backButton
+
 ------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 ----------------------------------------------------------------------
-
+-- Creating Transitioning Function back to main menu
+local function BackTransition( )
+    composer.gotoScene( "main_menu", {effect = "slideUp", time = 500})
+end
 
 -- function is called when the screen doesn't exist
 function scene:create( event )
     local sceneGroup = self.view
     -- set the background color
-    display.setDefault("background", 0, 0, 0)
+    display.setDefault("background", 1, 0, 0)
+
+    -- Creating Back Button
+    backButton = widget.newButton( 
+    {
+        -- Setting Position
+        x = display.contentWidth*2/8,
+        y = display.contentHeight*14/16,
+
+        -- Setting Dimensions
+        width = 200,
+        height = 100,
+
+        -- Setting Visual Properties
+        defaultFile = "Images/backButtonUnpressedAlex@2x.png",
+        overFile = "Images/BackButtonPressedAlex@2x.png",
+
+        -- Setting Functional Properties
+        onRelease = BackTransition
+
+    } )
+
+    -- add buttons, objects and images to sceneGroup
+    sceneGroup:insert( backButton)
 
 end
 

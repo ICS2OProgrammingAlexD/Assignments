@@ -1,9 +1,16 @@
+-- Title: credits_screen.lua
+-- Created by: Alex De Meo
+-- Date: Nov. 19
+-- Description: This is the credits screen. Here you will se the designers (Nimota, Meron and Justin)
+-- and the programmers (Ferdous and I)
+
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
 
 -- Use Composer Libraries
 local composer = require( "composer" )
+-- use widget Libraries
 local widget = require( "widget" )
 
 -----------------------------------------------------------------------------------------
@@ -12,7 +19,8 @@ local widget = require( "widget" )
 sceneName = "credits_screen"
 
 -- Creating Scene Object
-scene = composer.newScene( sceneName ) -- This function doesn't accept a string, only a variable containing a string
+scene = composer.newScene( sceneName ) 
+-- ^This function doesn't accept a string, only a variable containing a string
 
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
@@ -27,6 +35,7 @@ local backButton
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
     composer.gotoScene( "main_menu", {effect = "slideRight", time = 500})
+
 end
 
 
@@ -65,15 +74,15 @@ function scene:create( event )
     backButton = widget.newButton( 
     {
         -- Setting Position
-        x = display.contentWidth*1/8,
-        y = display.contentHeight*15/16,
+        x = display.contentWidth*2/8,
+        y = display.contentHeight*14/16,
 
         -- Setting Dimensions
         width = 200,
         height = 100,
 
         -- Setting Visual Properties
-        defaultFile = "Images/BackButtonUnpressedAlex@2x.png",
+        defaultFile = "Images/backButtonUnpressedAlex@2x.png",
         overFile = "Images/BackButtonPressedAlex@2x.png",
 
         -- Setting Functional Properties
@@ -109,8 +118,6 @@ function scene:show( event )
 
     elseif ( phase == "did" ) then
         -- Called when the scene is now on screen.
-        -- Insert code here to make the scene come alive.
-        -- Example: start timers, begin animation, play audio, etc.
     end
 
 end -- function scene:show( event )
@@ -131,8 +138,6 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
 
     -----------------------------------------------------------------------------------------
 

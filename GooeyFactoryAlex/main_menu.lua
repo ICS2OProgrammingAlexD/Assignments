@@ -45,6 +45,7 @@ local creditsScrollSpeed2 = 5
 local playScrollSpeed = 10
 local playScrollSpeed2 = 10
 local moveToPosition = false
+local cake
 
 
 -----------------------------------------------------------------------------------------
@@ -53,19 +54,17 @@ local moveToPosition = false
 
 -- Creating Transition Function to Credits Page
 local function CreditsTransition( )       
-    composer.gotoScene( "credits_screen", {effect = "crossFade", time = 500})
+    composer.gotoScene( "credits_screen", {effect = "slideLeft", time = 500})
 end 
-
------------------------------------------------------------------------------------------
 
 -- Creating Transition to Level1 Screen
 local function Level1ScreenTransition( )
-    composer.gotoScene( "level1_screen", {effect = "fade", time = 1000})
+    composer.gotoScene( "level1_screen", {effect = "crossFade", time = 1000})
 end    
 
 -- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRUCTIONS SCREEN 
 local function InstructionsTransition( )
-    composer.gotoScene("instructions_screen", {effect = "flip", time = 1000})
+    composer.gotoScene("instructions_screen", {effect = "slideDown", time = 1000})
 end
 
 -- this function move the buttons into position
@@ -95,9 +94,6 @@ local function MoveButtons()
         end
     end
 end
-
-
-
 
 -----------------------------------------------------------------------------------------
 -- GLOBAL SCENE FUNCTIONS
@@ -183,14 +179,20 @@ function scene:create( event )
           onRelease = InstructionsTransition
       } )
     -----------------------------------------------------------------------------------------
+    -- create the cake
+    cake = display.newImage("Images/cake.png")
+    cake.x = display.contentWidth*2/5 - 92
+    cake.y = display.contentHeight*2/3 - 20
+    cake.width = 350
+    cake.height = 425
 
-    -- Associating button widgets with this scene
+    -- Associating button widgets and images with this scene 
     sceneGroup:insert( bkg_image )
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
-    sceneGroup:insert( instructionsButton)
+    sceneGroup:insert( instructionsButton )
+    sceneGroup:insert( cake )
     
-    -- INSERT INSTRUCTIONS BUTTON INTO SCENE GROUP
 
 end -- function scene:create( event )   
 
@@ -220,7 +222,7 @@ function scene:show( event )
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
-        Runtime:addEventListener("enterFrame", MoveButtons)
+        MoveButtons()
 
     end
 
@@ -249,7 +251,6 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-        Runtime:removeEventListener("enterFrame", MoveButtons)
     end
 
 end -- function scene:hide( event )
