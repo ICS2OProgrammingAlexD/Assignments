@@ -37,7 +37,13 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     -- set the background color
-    display.setDefault("background", 1, 0, 0)
+    bkgImage = display.newImage("Images/InstructionsScreenAlex@2x.png")
+    bkgImage.width = display.contentWidth
+    bkgImage.height = display.contentHeight
+    bkgImage.x = display.contentWidth/2
+    bkgImage.y = display.contentHeight/2
+
+
 
     -- Creating Back Button
     backButton = widget.newButton( 
@@ -60,7 +66,9 @@ function scene:create( event )
     } )
 
     -- add buttons, objects and images to sceneGroup
+    sceneGroup:insert( bkgImage)
     sceneGroup:insert( backButton)
+
 
 end
 

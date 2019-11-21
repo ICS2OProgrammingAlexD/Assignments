@@ -24,6 +24,12 @@ display.setStatusBar(display.HiddenStatusBar)
 local bkgImage
 
 ----------------------------------------------------------------------------
+--LOCAL SOUNDS
+----------------------------------------------------------------------------
+local bkgMusic = audio.loadStream("Sounds/Level1Music.mp3")
+local bkgMusicChannel
+
+----------------------------------------------------------------------------
 --LOCAL FUNCTIONS
 ----------------------------------------------------------------------------
 
@@ -36,6 +42,9 @@ function scene:create( event )
 	bkgImage.height = display.contentHeight
 	bkgImage.x = display.contentWidth/2
 	bkgImage.y = display.contentHeight/2
+
+	-- insert images and buttons to sceneGroup
+	sceneGroup:insert(bkgImage)
 end
 
 -- the function is called when the scene is still off screen (but is about to come on screen)
@@ -56,6 +65,7 @@ function scene:show(event)
 
     elseif ( phase == "did" ) then
         -- Play the Intro Music
+        bkgMusicChannel = audio.play(bkgMusic)
     end
 
 end
@@ -71,6 +81,7 @@ function scene:hide( event )
 	--------------------------------------------------
 	elseif (phase == "did") then
 		-- stop the sound 
+		audio.stop(bkgMusicChannel)
 	end
 end
 

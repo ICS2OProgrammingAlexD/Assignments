@@ -29,6 +29,10 @@ sceneName = "main_menu"
 local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
+-- GLOBAL VARIABLES
+-----------------------------------------------------------------------------------------
+soundOn = true
+-----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
 
@@ -46,8 +50,14 @@ local playScrollSpeed = 10
 local playScrollSpeed2 = 10
 local moveToPosition = false
 local cake
+local muteButton
+local unmuteButton
 
-
+-----------------------------------------------------------------------------------------
+-- LOCAL SOUNDS
+-----------------------------------------------------------------------------------------
+local bkgMusic = audio.loadStream("Sounds/MainMenuMusic.mp3")
+local bkgMusicChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
@@ -62,13 +72,41 @@ local function Level1ScreenTransition( )
     composer.gotoScene( "level1_screen", {effect = "crossFade", time = 1000})
 end    
 
--- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRUCTIONS SCREEN 
+--LOCAL FUNCTION THAT GOES TO INSTRUCTIONS SCREEN 
 local function InstructionsTransition( )
     composer.gotoScene("instructions_screen", {effect = "slideDown", time = 1000})
 end
 
+-- this function mute the sound 
+local function Mute( touch )
+    if (touch.phase == "ended") then
+        -- pause the sound
+        audio.pause(bkgMusicChannel)
+        -- set boolean variable to false
+        soundOn = false
+        -- hide mute button 
+        muteButton.isVisible = false
+        --show unmute button
+        unmuteButton.isVisible = true
+    end
+end
+-- this function resumes the sound 
+local function Unmute( touch )
+    if (touch.phase == "ended") then
+        -- resume the sound
+        audio.resume(bkgMusicChannel)
+        -- set boolean variable to false
+        soundOn = true
+        -- show mute button 
+        muteButton.isVisible = true
+        --hide unmute button
+        unmuteButton.isVisible = false
+
+    end
+end
+
 -- this function move the buttons into position
-local function MoveButtons()
+local function MoveButtons(event)
      -- moves buttons right
     if (instructionsButton.x < display.contentWidth*8/10) then       
         instructionsButton.x = instructionsButton.x + instructionsScrollSpeed
@@ -110,7 +148,7 @@ function scene:create( event )
     -----------------------------------------------------------------------------------------
 
     -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImage("Images/MainMenuAlex@2x.png")
+    bkg_image = display.newImage("Images/MainMenuAlex.png")
     bkg_image.x = display.contentCenterX
     bkg_image.y = display.contentCenterY
     bkg_image.width = display.contentWidth
@@ -186,14 +224,30 @@ function scene:create( event )
     cake.width = 350
     cake.height = 425
 
+    -- create mute button
+    muteButton = display.newImage("Images/muteButton.png")
+    muteButton.width = 50
+    muteButton.height = 50
+    muteButton.x = display.contentWidth/15
+    muteButton.y = display.contentHeight/10
+    muteButton.isVisible = true
+    
+    -- create unmute button
+    unmuteButton = display.newImage("Images/unmuteButton.png")
+    unmuteButton.width = 50
+    unmuteButton.height = 50
+    unmuteButton.x = display.contentWidth/15
+    unmuteButton.y = display.contentHeight/10
+    unmuteButton.isVisible = false
+
     -- Associating button widgets and images with this scene 
     sceneGroup:insert( bkg_image )
     sceneGroup:insert( playButton )
     sceneGroup:insert( creditsButton )
     sceneGroup:insert( instructionsButton )
     sceneGroup:insert( cake )
-    
-
+    sceneGroup:insert( muteButton)
+    sceneGroup:insert( unmuteButton)
 end -- function scene:create( event )   
 
 
@@ -222,8 +276,15 @@ function scene:show( event )
     -- Insert code here to make the scene come alive.
     -- Example: start timers, begin animation, play audio, etc.
     elseif ( phase == "did" ) then       
-        MoveButtons()
+        --MoveButtons()
+        Runtime:addEventListener("enterFrame", MoveButtons)
 
+        --add event Listeners
+        muteButton:addEventListener("touch", Mute)
+        unmuteButton:addEventListener("touch", Unmute)
+
+        -- start music
+        bkgMusicChannel = audio.play(bkgMusic, {channel=1, loop= -1})
     end
 
 end -- function scene:show( event )
@@ -251,6 +312,13 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+        -- stop the bkgMusic
+        audio.stop(bkgMusicChannel)
+
+        -- remove event liseners
+        muteButton:removeEventListener("touch", Mute)
+        unmuteButton:removeEventListener("touch", Unmute)
+
     end
 
 end -- function scene:hide( event )
