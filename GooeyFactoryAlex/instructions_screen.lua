@@ -37,7 +37,7 @@ end
 function scene:create( event )
     local sceneGroup = self.view
     -- set the background color
-    bkgImage = display.newImage("Images/InstructionsScreenAlex@2x.png")
+    bkgImage = display.newImage("Images/InstructionsScreenAlex.png")
     bkgImage.width = display.contentWidth
     bkgImage.height = display.contentHeight
     bkgImage.x = display.contentWidth/2
@@ -57,8 +57,8 @@ function scene:create( event )
         height = 100,
 
         -- Setting Visual Properties
-        defaultFile = "Images/backButtonUnpressedAlex@2x.png",
-        overFile = "Images/BackButtonPressedAlex@2x.png",
+        defaultFile = "Images/backButtonUnpressedAlex.png",
+        overFile = "Images/BackButtonPressedAlex.png",
 
         -- Setting Functional Properties
         onRelease = BackTransition

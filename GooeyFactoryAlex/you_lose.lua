@@ -1,101 +1,65 @@
--- Title: credits_screen.lua
--- Created by: Alex De Meo
--- Date: Nov. 19
--- Description: This is the credits screen. Here you will se the designers (Nimota, Meron and Justin)
--- and the programmers (Ferdous and I)
+-----------------------------------------------------------------------------------------
+--
+-- SceneTemplate.lua
+-- Scene Template (Composer API)
+--
+-----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
 -----------------------------------------------------------------------------------------
 
--- Use Composer Libraries
+-- Calling Composer Library
 local composer = require( "composer" )
--- use widget Libraries
+
 local widget = require( "widget" )
 
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "credits_screen"
+sceneName = "you_lose"
+
+-----------------------------------------------------------------------------------------
 
 -- Creating Scene Object
-scene = composer.newScene( sceneName ) 
--- ^This function doesn't accept a string, only a variable containing a string
+local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
--- LOCAL VARIABLES
+-- FORWARD REFERENCES
 -----------------------------------------------------------------------------------------
-local bkg_image
-local backButton
 
+-- local variables for the scene
+local bkgImage
+local youWinSound = audio.loadStream("Sounds/")
+local youWinSoundChannel
+
+----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
--- Creating Transitioning Function back to main menu
-local function BackTransition( )
-    composer.gotoScene( "main_menu", {effect = "slideRight", time = 500})
-
-end
-
-
------------------------------------------------------------------------------------------
--- GLOBAL SCENE FUNCTIONS
------------------------------------------------------------------------------------------
-
+--------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
 function scene:create( event )
 
     -- Creating a group that associates objects with the scene
     local sceneGroup = self.view
 
-    -----------------------------------------------------------------------------------------
-    -- BACKGROUND AND DISPLAY OBJECTS
-    -----------------------------------------------------------------------------------------
-
-    -- Insert the background image and set it to the center of the screen
-    bkg_image = display.newImageRect("Images/CreditsScreenFerdous.png", display.contentWidth, display.contentHeight)
-    bkg_image.x = display.contentCenterX
-    bkg_image.y = display.contentCenterY
-    bkg_image.width = display.contentWidth
-    bkg_image.height = display.contentHeight
-
+    -- Display background
+    bkgImage = display.newImage("Images/.png")
+    bkgImage.x = display.contentCenterX
+    bkgImage.y = display.contentCenterY
+    bkgImage.width = display.contentWidth
+    bkgImage.height = display.contentHeight
+   
     -- Associating display objects with this scene 
-    sceneGroup:insert( bkg_image )
+    sceneGroup:insert( bkgImage )
+  
+end    
 
-    -- Send the background image to the back layer so all other objects can be on top
-    bkg_image:toBack()
-
-    -----------------------------------------------------------------------------------------
-    -- BUTTON WIDGETS
-    -----------------------------------------------------------------------------------------
-
-    -- Creating Back Button
-    backButton = widget.newButton( 
-    {
-        -- Setting Position
-        x = display.contentWidth*2/8,
-        y = display.contentHeight*14/16,
-
-        -- Setting Dimensions
-        width = 200,
-        height = 100,
-
-        -- Setting Visual Properties
-        defaultFile = "Images/backButtonUnpressedAlex@2x.png",
-        overFile = "Images/BackButtonPressedAlex@2x.png",
-
-        -- Setting Functional Properties
-        onRelease = BackTransition
-
-    } )
-
-    -----------------------------------------------------------------------------------------
-
-    -- Associating Buttons with this scene
-    sceneGroup:insert( backButton )
-    
-end --function scene:create( event )
+-----------------------------------------------------------------------------------------
+-- GLOBAL SCENE FUNCTIONS
+-----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
 
@@ -117,10 +81,14 @@ function scene:show( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
+
         -- Called when the scene is now on screen.
+        -- Insert code here to make the scene come alive.
+        -- Example: start timers, begin animation, play audio, etc.
+
     end
 
-end -- function scene:show( event )
+end
 
 -----------------------------------------------------------------------------------------
 
@@ -138,6 +106,8 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is on screen (but is about to go off screen).
+        -- Insert code here to "pause" the scene.
+        -- Example: stop timers, stop animation, stop audio, etc.
 
     -----------------------------------------------------------------------------------------
 
@@ -145,7 +115,7 @@ function scene:hide( event )
         -- Called immediately after scene goes off screen.
     end
 
-end --function scene:hide( event )
+end
 
 -----------------------------------------------------------------------------------------
 
@@ -161,8 +131,7 @@ function scene:destroy( event )
     -- Called prior to the removal of scene's view ("sceneGroup").
     -- Insert code here to clean up the scene.
     -- Example: remove display objects, save state, etc.
-
-end --function scene:destroy( event )
+end
 
 -----------------------------------------------------------------------------------------
 -- EVENT LISTENERS

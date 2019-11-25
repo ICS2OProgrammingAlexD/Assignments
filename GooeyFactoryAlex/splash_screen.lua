@@ -27,12 +27,13 @@ display.setStatusBar(display.HiddenStatusBar)
 local companyLogo
 local companyLogo2
 local scrollSpeed = 5
+local calledMainMenuTransition = false
 
 --------------------------------------------------------
 -- LOCAL SOUNDS
 --------------------------------------------------------------
 
-local splashScreenSound = audio.loadStream("Sounds/Intro.mp3")
+local splashScreenSound = audio.loadSound("Sounds/Intro.mp3")
 local splashScreenSoundChannel
 
 
@@ -50,7 +51,8 @@ local function LogoFadeInOut(  )
     companyLogo.alpha = companyLogo.alpha - 0.04
     -- make the second company logo fade in 
     companyLogo2.alpha = companyLogo2.alpha + 0.019 
-    if (companyLogo2.alpha == 1) then
+    if (companyLogo2.alpha == 1) and (calledMainMenuTransition == false) then
+        calledMainMenuTransition = true
         --go to the main menu
         timer.performWithDelay(500, MainMenuTransition)
     end
@@ -61,7 +63,7 @@ local function DropLogo(event)
         --stop the company logo from dropping 
 		scrollSpeed = 0
         -- start LogoFadeInOut
-        timer.performWithDelay(1500, LogoFadeInOut)
+        timer.performWithDelay(1500, LogoFadeInOut)        
 	else
         -- drop the logo down
 		companyLogo.y = companyLogo.y + scrollSpeed
@@ -76,14 +78,14 @@ function scene:create( event )
 	display.setDefault("background", 1, 1, 1)
 
     -- Insert the companyLogo image
-    companyLogo = display.newImageRect("Images/CompanyLogo@2x.png", 300, 300)
+    companyLogo = display.newImageRect("Images/CompanyLogoAlexD.png", 300, 300)
 
     -- set the initial x and y position of the companyLogo
     companyLogo.x = display.contentCenterX
     companyLogo.y = -200
 
     -- create the company logo 2
-    companyLogo2 = display.newImageRect("Images/CompanyLogoNumber2@2x.png", 1024, 768)
+    companyLogo2 = display.newImageRect("Images/CompanyLogo2AlexD.png", 1024, 768)
     companyLogo2.x = display.contentWidth/2
     companyLogo2.y = display.contentHeight/2
     companyLogo2.alpha = 0
@@ -112,9 +114,10 @@ function scene:show(event)
 
     elseif ( phase == "did" ) then
         -- Play the Intro Music
-        splashScreenSoundChannel = audio.play(splashScreenSound)
+        splashScreenSoundChannel = audio.play(splashScreenSound, {channel = 1})
         -- Drop the logo from the screen 
         Runtime:addEventListener("enterFrame", DropLogo)
+        --timer.performWithDelay(1500, LogoFadeInOut, 0)
     end
 
 end

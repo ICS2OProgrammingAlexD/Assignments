@@ -56,7 +56,7 @@ local unmuteButton
 -----------------------------------------------------------------------------------------
 -- LOCAL SOUNDS
 -----------------------------------------------------------------------------------------
-local bkgMusic = audio.loadStream("Sounds/MainMenuMusic.mp3")
+local bkgMusic = audio.loadSound("Sounds/MainMenuMusic.mp3")
 local bkgMusicChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -120,15 +120,15 @@ local function MoveButtons(event)
 
         -- stop the instructions Buttons from moving off screen
         if (instructionsButton.y < display.contentHeight*2/5) then
-        instructionsScrollSpeed2 = 0
+            instructionsScrollSpeed2 = 0
         end
         -- stops the credits buttons from moving off screen
         if (creditsButton.y > display.contentHeight*3/5) then
-        creditsScrollSpeed2 = 0
+            creditsScrollSpeed2 = 0
         end
         -- stops the play buttons from moving off screen
         if (playButton.y > display.contentHeight*4/5) then
-        playScrollSpeed2 = 0
+            playScrollSpeed2 = 0
         end
     end
 end
@@ -167,8 +167,8 @@ function scene:create( event )
             y = display.contentHeight/2 + 30,
 
             -- Insert the images here
-            defaultFile = "Images/PlayButtonUnpressedAlex@2x.png",
-            overFile = "Images/PlayButtonPressedAlex@2x.png",
+            defaultFile = "Images/PlayButtonUnpressedAlex.png",
+            overFile = "Images/PlayButtonPressedAlex.png",
             -- height and width
             width = 200,
             height = 100,
@@ -187,8 +187,8 @@ function scene:create( event )
             y = display.contentHeight/2 + 30,
 
             -- Insert the images here
-            defaultFile = "Images/creditsButtonUnpressedAlex@2x.png",
-            overFile = "Images/creditsButtonPressedAlex@2x.png",
+            defaultFile = "Images/creditsButtonUnpressedAlex.png",
+            overFile = "Images/creditsButtonPressedAlex.png",
             -- height and width
             width = 200,
             height = 100,
@@ -210,8 +210,8 @@ function scene:create( event )
           height = 100,
 
           -- Insert the images here
-          defaultFile = "Images/InstructionsButtonUnpressedAlex@2x.png",
-          overFile = "Images/InstructionsButtonPressedAlex@2x.png",
+          defaultFile = "Images/InstructionsButtonUnpressedAlex.png",
+          overFile = "Images/InstructionsButtonPressedAlex.png",
 
           -- when button is released, call the instructions transition function  
           onRelease = InstructionsTransition
@@ -284,7 +284,7 @@ function scene:show( event )
         unmuteButton:addEventListener("touch", Unmute)
 
         -- start music
-        bkgMusicChannel = audio.play(bkgMusic, {channel=1, loop= -1})
+        bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
     end
 
 end -- function scene:show( event )
