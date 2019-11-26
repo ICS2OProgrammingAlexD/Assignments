@@ -15,4 +15,4 @@ local composer = require("composer")
 ---------------------------------------------------------------------------------------
 
 -- go to the splash screen
-composer.gotoScene( "splash_screen" )
+composer.gotoScene( "main_menu" )
