@@ -82,17 +82,17 @@ local booSound
 local function PositionAnswers()
     -- set the new y-positions of each of the answers
     flour.y = display.contentHeight * 0.7
-    flour.x = display.contentWidth/
+    flour.x = display.contentWidth* 7 / 10
     --eggs
     eggs.y = display.contentHeight * 0.70
-    eggs.x = display.contentWidth/2 + 300
+    eggs.x = display.contentWidth* 9 / 10
 
     --butter
     butter.y = display.contentHeight * 0.55
-    butter.x = display.contentWidth/
+    butter.x = display.contentWidth * 7 / 10
     -- sugar
     sugar.y = display.contentHeight * 0.55
-    sugar.x = display.contentWidth/2 + 300
+    sugar.x = display.contentWidth* 9 / 10
     ---------------------------------------------------------
     --remembering their positions to return the answer in case it's wrong
     butterPreviousY = butter.y
@@ -110,17 +110,6 @@ local function YouWinTransitionLevel1( )
     composer.gotoScene("you_win", {effect = "fade", time = 500})
 end
 
--- Function to Restart Level 1
-local function RestartLevel1()
-    PositionAnswers()    
-end
-
--- Function to Check User Input
-local function CheckUserAnswerInput()
-          
-    timer.performWithDelay(1600, RestartLevel1) 
-end
-
 local function TouchListenerFlour(touch)
     --only work if none of the other boxes have been touched
     if (butterAlreadyTouched == false) and 
@@ -135,8 +124,8 @@ local function TouchListenerFlour(touch)
         --drag the answer to follow the mouse
         elseif (touch.phase == "moved") then
             
-            answerbox.x = touch.x
-            answerbox.y = touch.y
+            flour.x = touch.x
+            flour.y = touch.y
 
         -- this occurs when they release the mouse
         elseif (touch.phase == "ended") then
@@ -144,23 +133,20 @@ local function TouchListenerFlour(touch)
             flourAlreadyTouched = false
 
               -- if the number is dragged into the userAnswerBox, place it in the center of it
-            if (((bowlPlaceholder.x - bowlPlaceholder.width/2) < answerbox.x ) and
-                ((bowlPlaceholder.x + bowlPlaceholder.width/2) > answerbox.x ) and 
-                ((bowlPlaceholder.y - bowlPlaceholder.height/2) < answerbox.y ) and 
-                ((bowlPlaceholder.y + bowlPlaceholder.height/2) > answerbox.y ) ) then
+            if (((bowlPlaceholder.x - bowlPlaceholder.width/2) < flour.x ) and
+                ((bowlPlaceholder.x + bowlPlaceholder.width/2) > flour.x ) and 
+                ((bowlPlaceholder.y - bowlPlaceholder.height/2) < flour.y ) and 
+                ((bowlPlaceholder.y + bowlPlaceholder.height/2) > flour.y ) ) then
 
                 -- setting the position of the number to be in the center of the box
-                answerbox.x = bowlPlaceholder.x
-                answerbox.y = bowlPlaceholder.y
-                userAnswer = correctAnswer
-
-                -- call the function to check if the user's input is correct or not
-                CheckUserAnswerInput()
+                flour.x = bowlPlaceholder.x
+                flour.y = bowlPlaceholder.y
+                flour.isVisible = false
 
             --else make box go back to where it was
             else
-                answerbox.x = answerboxPreviousX
-                answerbox.y = answerboxPreviousY
+                flour.x = flourPreviousX
+                flour.y = flourPreviousY
             end
         end
     end                
@@ -192,13 +178,9 @@ local function TouchListenerButter(touch)
 
                 butter.x = bowlPlaceholder.x
                 butter.y = bowlPlaceholder.y
+                butter.isVisible = false
 
-                userAnswer = alternateAnswer1
-
-                -- call the function to check if the user's input is correct or not
-                CheckUserAnswerInput()
-
-            --else make box go back to where it was
+            --else make butter go back to where it was
             else
                 butter.x = butterPreviousX
                 butter.y = butterPreviousY
@@ -233,12 +215,9 @@ local function TouchListenerEggs(touch)
 
                 eggs.x = bowlPlaceholder.x
                 eggs.y = bowlPlaceholder.y
-                userAnswer = alternateAnswer2
+                eggs.isVisible = false
 
-                -- call the function to check if the user's input is correct or not
-                CheckUserAnswerInput()
-
-            --else make box go back to where it was
+            --else make rggs go back to where they were
             else
                 eggs.x = eggsPreviousX
                 eggs.y = eggsPreviousY
@@ -247,18 +226,58 @@ local function TouchListenerEggs(touch)
     end
 end 
 
+local function TouchListenerSugar(touch)
+    --only work if none of the other boxes have been touched
+    if (flourAlreadyTouched == false) and 
+        (butterAlreadyTouched == false) and 
+        (eggsAlreadyTouched == false) then
+
+        if (touch.phase == "began") then
+            --let other boxes know it has been clicked
+            sugarAlreadyTouched = true
+            
+        elseif (touch.phase == "moved") then
+            --dragging function
+            sugar.x = touch.x
+            sugar.y = touch.y
+
+        elseif (touch.phase == "ended") then
+            sugarAlreadyTouched = false
+
+            -- if the box is in the userAnswerBox Placeholder  go to center of placeholder
+            if (((bowlPlaceholder.x - bowlPlaceholder.width/2) < sugar.x ) and 
+                ((bowlPlaceholder.x + bowlPlaceholder.width/2) > sugar.x ) and 
+                ((bowlPlaceholder.y - bowlPlaceholder.height/2) < sugar.y ) and 
+                ((bowlPlaceholder.y + bowlPlaceholder.height/2) > sugar.y ) ) then
+
+                sugar.x = bowlPlaceholder.x
+                sugar.y = bowlPlaceholder.y
+                sugar.isVisible = false
+
+            --else make rggs go back to where they were
+            else
+                sugar.x = sugarPreviousX
+                sugar.y = sugarPreviousY
+            end
+        end
+    end
+end 
+
 -- Function that Adds Listeners to each answer box
 local function AddAnswerBoxEventListeners()
-    answerbox:addEventListener("touch", TouchListenerFlour)
+    flour:addEventListener("touch", TouchListenerFlour)
     butter:addEventListener("touch", TouchListenerButter)
     eggs:addEventListener("touch", TouchListenerEggs)
+    sugar:addEventListener("touch", TouchListenerSugar)
+
 end 
 
 -- Function that Removes Listeners to each answer box
 local function RemoveAnswerBoxEventListeners()
-    answerbox:removeEventListener("touch", TouchListenerFlour)
+    flour:removeEventListener("touch", TouchListenerFlour)
     butter:removeEventListener("touch", TouchListenerButter)
     eggs:removeEventListener("touch", TouchListenerEggs)
+    sugar:removeEventListener("touch", TouchListenersugar)
 end 
 
 ----------------------------------------------------------------------------------
@@ -290,19 +309,19 @@ function scene:create( event )
     sugarAlreadyTouched = false
 
     --create answerbox alternate answers and the boxes to show them
-    flour = display.newImageRect("Images/flour.png", 100, 200)
+    flour = display.newImageRect("Images/flour.png", 100, 100)
     flour.isVisible = true
-    butter = display.newImageRect("Images/butter.png", 200, 100)
+    butter = display.newImageRect("Images/butter.png", 150, 75)
     butter.isVisible = true
-    eggs = display.newImageRect("Images/eggs.png", 200, 75)
+    eggs = display.newImageRect("Images/eggs.png", 100, 50)
     eggs.isVisible = true
-    sugar = display.newImageRect("Images/sugar.png", 100, 200)
+    sugar = display.newImageRect("Images/sugar.png", 50, 100)
     sugar.isVisible = true
 
     -- the black box where the user will drag the answer
-    bowlPlaceholder = display.newImageRect("Images/bowlPlaceholder.png",  130, 130, 0, 0)
-    bowlPlaceholder.x = display.contentWidth * 0.6
-    bowlPlaceholder.y = display.contentHeight * 0.9
+    bowlPlaceholder = display.newImageRect("Images/bowlPlaceholder.png",  150, 130, 0, 0)
+    bowlPlaceholder.x = display.contentWidth/2
+    bowlPlaceholder.y = display.contentHeight* 3 / 5
 
     ----------------------------------------------------------------------------------
     --adding objects to the scene group
@@ -338,9 +357,8 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        RestartLevel1()
         AddAnswerBoxEventListeners() 
-
+        PositionAnswers()
     end
 
 end --function scene:show( event )

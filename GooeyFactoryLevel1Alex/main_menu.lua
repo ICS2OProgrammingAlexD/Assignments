@@ -282,9 +282,14 @@ function scene:show( event )
         --add event Listeners
         muteButton:addEventListener("touch", Mute)
         unmuteButton:addEventListener("touch", Unmute)
+        if (soundOn == true) then
 
-        -- start music
-        bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
+            -- start music
+            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
+        else
+            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
+            audio.pause(bkgMusicChannel)
+        end
     end
 
 end -- function scene:show( event )
