@@ -285,9 +285,9 @@ function scene:show( event )
         if (soundOn == true) then
 
             -- start music
-            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
+            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loops= -1})
         else
-            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loop= -1})
+            bkgMusicChannel = audio.play(bkgMusic, {channel=2, loops= -1})
             audio.pause(bkgMusicChannel)
         end
     end
@@ -310,16 +310,14 @@ function scene:hide( event )
 
     if ( phase == "will" ) then
         -- Called when the scene is on screen (but is about to go off screen).
-        -- Insert code here to "pause" the scene.
-        -- Example: stop timers, stop animation, stop audio, etc.
+        -- stop the bkgMusic
+        audio.stop(bkgMusicChannel)
+
 
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
-        -- stop the bkgMusic
-        audio.stop(bkgMusicChannel)
-
         -- remove event liseners
         muteButton:removeEventListener("touch", Mute)
         unmuteButton:removeEventListener("touch", Unmute)

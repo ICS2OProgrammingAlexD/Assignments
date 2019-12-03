@@ -47,11 +47,12 @@ local butterAlreadyTouched = false
 local eggsAlreadyTouched = false
 local sugarAlreadyTouched = false
 
---create textboxes holding answer and alternate answers 
+--create objects
 local flour
 local butter
 local eggs
 local sugar
+local list
 
 -- create variables that will hold the previous x- and y-positions so that 
 -- each answer will return back to its previous position after it is moved
@@ -68,9 +69,12 @@ local sugarPreviousX
 -- the black box where the user will drag the answer
 local bowlPlaceholder
 
--- sound effects
-local correctSound
-local booSound
+-----------------------------------------------------------------------------------------
+-- LOCAL SOUNDS
+-----------------------------------------------------------------------------------------
+local bkgMusic = audio.loadStream("Sounds/Level1Music.mp3")
+local bkgMusicChannel
+
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -79,7 +83,7 @@ local booSound
 
 
 
-local function PositionAnswers()
+local function PositionIngredients()
     -- set the new y-positions of each of the answers
     flour.y = display.contentHeight * 0.7
     flour.x = display.contentWidth* 7 / 10
@@ -254,7 +258,7 @@ local function TouchListenerSugar(touch)
                 sugar.y = bowlPlaceholder.y
                 sugar.isVisible = false
 
-            --else make rggs go back to where they were
+            --else make sugar go back to where it was
             else
                 sugar.x = sugarPreviousX
                 sugar.y = sugarPreviousY
@@ -264,7 +268,7 @@ local function TouchListenerSugar(touch)
 end 
 
 -- Function that Adds Listeners to each answer box
-local function AddAnswerBoxEventListeners()
+local function AddIngredientEventListeners()
     flour:addEventListener("touch", TouchListenerFlour)
     butter:addEventListener("touch", TouchListenerButter)
     eggs:addEventListener("touch", TouchListenerEggs)
@@ -273,7 +277,7 @@ local function AddAnswerBoxEventListeners()
 end 
 
 -- Function that Removes Listeners to each answer box
-local function RemoveAnswerBoxEventListeners()
+local function RemoveIngredientEventListeners()
     flour:removeEventListener("touch", TouchListenerFlour)
     butter:removeEventListener("touch", TouchListenerButter)
     eggs:removeEventListener("touch", TouchListenerEggs)
@@ -315,8 +319,13 @@ function scene:create( event )
     butter.isVisible = true
     eggs = display.newImageRect("Images/eggs.png", 100, 50)
     eggs.isVisible = true
-    sugar = display.newImageRect("Images/sugar.png", 50, 100)
+    sugar = display.newImageRect("Images/sugar.png", 75, 100)
     sugar.isVisible = true
+
+    -- create the list of ingredients
+    list = display.newImageRect("Images/List.png", 500, 250)
+    list.x = display.contentWidth * 7 / 10
+    list.y = display.contentHeight * 1 / 5
 
     -- the black box where the user will drag the answer
     bowlPlaceholder = display.newImageRect("Images/bowlPlaceholder.png",  150, 130, 0, 0)
@@ -327,12 +336,13 @@ function scene:create( event )
     --adding objects to the scene group
     ----------------------------------------------------------------------------------
 
-    sceneGroup:insert( bkg_image ) 
-    sceneGroup:insert( bowlPlaceholder )
-    sceneGroup:insert( flour )
-    sceneGroup:insert( butter )
-    sceneGroup:insert( eggs )
-    sceneGroup:insert( sugar )
+    sceneGroup:insert( bkg_image) 
+    sceneGroup:insert( bowlPlaceholder)
+    sceneGroup:insert( flour)
+    sceneGroup:insert( butter)
+    sceneGroup:insert( eggs)
+    sceneGroup:insert( sugar)
+    sceneGroup:insert( list)
 
 
 end --function scene:create( event )
@@ -357,8 +367,14 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
-        AddAnswerBoxEventListeners() 
-        PositionAnswers()
+        AddIngredientEventListeners() 
+        PositionIngredients()
+        if (soundOn == true) then
+            bkgMusicChannel = audio.play(bkgMusic, {channel=3, loops= -1})
+        else
+            bkgMusicChannel = audio.play(bkgMusic, {channel=3, loops= -1})
+            audio.pause(bkgMusicChannel)
+        end
     end
 
 end --function scene:show( event )
@@ -383,9 +399,9 @@ function scene:hide( event )
     -----------------------------------------------------------------------------------------
 
     elseif ( phase == "did" ) then
-        -- Called immediately after scene goes off screen.
-        audio.stop()
-        RemoveAnswerBoxEventListeners()
+        -- Called immediately after scene goes off screen. 
+        audio.stop(bkgMusicChannel)
+        RemoveIngredientEventListeners()
     end
 
 end --function scene:hide( event )
