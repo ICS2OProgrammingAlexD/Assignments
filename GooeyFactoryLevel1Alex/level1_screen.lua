@@ -36,11 +36,6 @@ local questionText
 -- Variables containing the user answer and the actual answer
 local userAnswer
 
---flour 
---butter
---eggs
---sugar
-
 -- boolean variables telling me which answer box was touched
 local flourAlreadyTouched = false
 local butterAlreadyTouched = false
@@ -53,9 +48,13 @@ local butter
 local eggs
 local sugar
 local list
+local butterCheckmark
+local sugarCheckmark
+local flourCheckmark
+local eggscheckmark
 
--- create variables that will hold the previous x- and y-positions so that 
--- each answer will return back to its previous position after it is moved
+-- create variables that will hold the previous x- and y-positions so that each ingredient
+-- will return back to its previous position after it isn't moved into the bowl
 local flourPreviousY
 local butterPreviousY
 local eggsPreviousY
@@ -75,6 +74,8 @@ local bowlPlaceholder
 local bkgMusic = audio.loadStream("Sounds/Level1Music.mp3")
 local bkgMusicChannel
 
+-- sound effect for when the ingredient is put into the bowl.
+local splashSound = audio.loadSound("Sounds/splash.mp3")
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -146,6 +147,11 @@ local function TouchListenerFlour(touch)
                 flour.x = bowlPlaceholder.x
                 flour.y = bowlPlaceholder.y
                 flour.isVisible = false
+                flourCheckmark.isVisible = true
+                if (soundOn == true) then
+                    audio.play(splashSound)
+                end
+
 
             --else make box go back to where it was
             else
@@ -183,6 +189,11 @@ local function TouchListenerButter(touch)
                 butter.x = bowlPlaceholder.x
                 butter.y = bowlPlaceholder.y
                 butter.isVisible = false
+                butterCheckmark.isVisible = true
+                if (soundOn == true) then
+                    audio.play(splashSound)
+                end
+
 
             --else make butter go back to where it was
             else
@@ -220,6 +231,11 @@ local function TouchListenerEggs(touch)
                 eggs.x = bowlPlaceholder.x
                 eggs.y = bowlPlaceholder.y
                 eggs.isVisible = false
+                eggsCheckmark.isVisible = true
+                if (soundOn == true) then
+                    audio.play(splashSound)
+                end
+
 
             --else make rggs go back to where they were
             else
@@ -257,6 +273,11 @@ local function TouchListenerSugar(touch)
                 sugar.x = bowlPlaceholder.x
                 sugar.y = bowlPlaceholder.y
                 sugar.isVisible = false
+                sugarCheckmark.isVisible = true
+
+                if (soundOn == true) then
+                    audio.play(splashSound)
+                end
 
             --else make sugar go back to where it was
             else
@@ -327,6 +348,30 @@ function scene:create( event )
     list.x = display.contentWidth * 7 / 10
     list.y = display.contentHeight * 1 / 5
 
+    -- create butterCheckmark
+    butterCheckmark = display.newImageRect("Images/checkmark.png", 25, 25)
+    butterCheckmark.x = display.contentWidth * 14 / 30 + 5
+    butterCheckmark.y = display.contentHeight * 9 / 42
+    butterCheckmark.isVisible = false
+
+    -- create sugarCheckmark
+    sugarCheckmark = display.newImageRect("Images/checkmark.png", 25, 25)
+    sugarCheckmark.x = display.contentWidth * 14 / 30 + 5
+    sugarCheckmark.y = display.contentHeight * 11 / 43
+    sugarCheckmark.isVisible = false
+
+    -- create flourCheckmark
+    flourCheckmark = display.newImageRect("Images/checkmark.png", 25, 25)
+    flourCheckmark.x = display.contentWidth * 14 / 30 + 5
+    flourCheckmark.y = display.contentHeight * 12 / 42
+    flourCheckmark.isVisible = false
+
+    -- create eggscheckmark
+    eggsCheckmark = display.newImageRect("Images/checkmark.png", 25, 25)
+    eggsCheckmark.x = display.contentWidth * 14 / 30 + 5
+    eggsCheckmark.y = display.contentHeight * 14 / 43
+    eggsCheckmark.isVisible = false
+
     -- the black box where the user will drag the answer
     bowlPlaceholder = display.newImageRect("Images/bowlPlaceholder.png",  150, 130, 0, 0)
     bowlPlaceholder.x = display.contentWidth/2
@@ -343,6 +388,10 @@ function scene:create( event )
     sceneGroup:insert( eggs)
     sceneGroup:insert( sugar)
     sceneGroup:insert( list)
+    sceneGroup:insert( butterCheckmark)
+    sceneGroup:insert( sugarCheckmark)
+    sceneGroup:insert( flourCheckmark)
+    sceneGroup:insert( eggsCheckmark)
 
 
 end --function scene:create( event )
@@ -371,9 +420,11 @@ function scene:show( event )
         PositionIngredients()
         if (soundOn == true) then
             bkgMusicChannel = audio.play(bkgMusic, {channel=3, loops= -1})
+            audio.setVolume(0.25, {channel=3})
         else
             bkgMusicChannel = audio.play(bkgMusic, {channel=3, loops= -1})
             audio.pause(bkgMusicChannel)
+            audio.setVolume(0.25, {channel=3})
         end
     end
 
