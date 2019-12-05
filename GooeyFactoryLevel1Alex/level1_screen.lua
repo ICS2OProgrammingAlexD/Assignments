@@ -51,7 +51,8 @@ local list
 local butterCheckmark
 local sugarCheckmark
 local flourCheckmark
-local eggscheckmark
+local eggsCheckmark
+local bakeButton
 
 -- create variables that will hold the previous x- and y-positions so that each ingredient
 -- will return back to its previous position after it isn't moved into the bowl
@@ -81,7 +82,15 @@ local splashSound = audio.loadSound("Sounds/splash.mp3")
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 
-
+-- show the bake button to allow the player to bake the cake
+local function ShowBakeButton()
+    if (butterCheckmark.isVisible == true) and
+        (sugarCheckmark.isVisible == true) and
+        (flourCheckmark.isVisible == true) and
+        (eggsCheckmark.isVisible == true) then
+        bakeButton.isVisible = true
+    end
+end
 
 
 local function PositionIngredients()
@@ -366,7 +375,7 @@ function scene:create( event )
     flourCheckmark.y = display.contentHeight * 12 / 42
     flourCheckmark.isVisible = false
 
-    -- create eggscheckmark
+    -- create eggsCheckmark
     eggsCheckmark = display.newImageRect("Images/checkmark.png", 25, 25)
     eggsCheckmark.x = display.contentWidth * 14 / 30 + 5
     eggsCheckmark.y = display.contentHeight * 14 / 43
