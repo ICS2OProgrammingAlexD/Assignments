@@ -81,7 +81,9 @@ local splashSound = audio.loadSound("Sounds/splash.mp3")
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-
+local function QuestionTransition(  )
+    composer.gotoScene("level1_questions", {effect = "fade", time = 500} )
+end
 -- show the bake button to allow the player to bake the cake
 local function ShowBakeButton()
     if (butterCheckmark.isVisible == true) and
@@ -160,6 +162,7 @@ local function TouchListenerFlour(touch)
                 if (soundOn == true) then
                     audio.play(splashSound)
                 end
+                timer.performWithDelay(500, ShowBakeButton)
 
 
             --else make box go back to where it was
@@ -202,6 +205,7 @@ local function TouchListenerButter(touch)
                 if (soundOn == true) then
                     audio.play(splashSound)
                 end
+                timer.performWithDelay(500, ShowBakeButton)
 
 
             --else make butter go back to where it was
@@ -244,6 +248,7 @@ local function TouchListenerEggs(touch)
                 if (soundOn == true) then
                     audio.play(splashSound)
                 end
+                timer.performWithDelay(500, ShowBakeButton)
 
 
             --else make rggs go back to where they were
@@ -287,6 +292,7 @@ local function TouchListenerSugar(touch)
                 if (soundOn == true) then
                     audio.play(splashSound)
                 end
+                timer.performWithDelay(500, ShowBakeButton)
 
             --else make sugar go back to where it was
             else
@@ -297,7 +303,7 @@ local function TouchListenerSugar(touch)
     end
 end 
 
--- Function that Adds Listeners to each answer box
+-- Function that Adds Listeners to each ingredient
 local function AddIngredientEventListeners()
     flour:addEventListener("touch", TouchListenerFlour)
     butter:addEventListener("touch", TouchListenerButter)
@@ -306,12 +312,12 @@ local function AddIngredientEventListeners()
 
 end 
 
--- Function that Removes Listeners to each answer box
+-- Function that Removes Listeners to each ingredient
 local function RemoveIngredientEventListeners()
     flour:removeEventListener("touch", TouchListenerFlour)
     butter:removeEventListener("touch", TouchListenerButter)
     eggs:removeEventListener("touch", TouchListenerEggs)
-    sugar:removeEventListener("touch", TouchListenersugar)
+    sugar:removeEventListener("touch", TouchListenerSugar)
 end 
 
 ----------------------------------------------------------------------------------
@@ -381,6 +387,26 @@ function scene:create( event )
     eggsCheckmark.y = display.contentHeight * 14 / 43
     eggsCheckmark.isVisible = false
 
+    -- create the bake button
+    bakeButton = widget.newButton(
+    {
+        -- Set its position on the screen relative to the screen size
+        x = display.contentWidth * 4 / 5,
+        y = display.contentHeight * 2 /3,
+
+        -- Insert the images here
+        defaultFile = "Images/BakeButtonUnpressedAlex.png",
+        overFile = "Images/BakeButtonPressedAlex.png",
+
+        -- height and width
+        width = 200,
+        height = 100,
+
+        -- go to the question
+        onRelease = QuestionTransition
+    } )
+    bakeButton.isVisible = false
+
     -- the black box where the user will drag the answer
     bowlPlaceholder = display.newImageRect("Images/bowlPlaceholder.png",  150, 130, 0, 0)
     bowlPlaceholder.x = display.contentWidth/2
@@ -388,8 +414,7 @@ function scene:create( event )
 
     ----------------------------------------------------------------------------------
     --adding objects to the scene group
-    ----------------------------------------------------------------------------------
-
+    ----------------------------------------------------------------------------------  
     sceneGroup:insert( bkg_image) 
     sceneGroup:insert( bowlPlaceholder)
     sceneGroup:insert( flour)
@@ -401,6 +426,7 @@ function scene:create( event )
     sceneGroup:insert( sugarCheckmark)
     sceneGroup:insert( flourCheckmark)
     sceneGroup:insert( eggsCheckmark)
+    sceneGroup:insert( bakeButton)
 
 
 end --function scene:create( event )
