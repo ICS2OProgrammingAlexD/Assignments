@@ -81,7 +81,7 @@ local splashSound = audio.loadSound("Sounds/splash.mp3")
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
-local function QuestionTransition(  )
+local function QuestionTransition()
     composer.gotoScene("level1_questions", {effect = "fade", time = 500} )
 end
 -- show the bake button to allow the player to bake the cake
