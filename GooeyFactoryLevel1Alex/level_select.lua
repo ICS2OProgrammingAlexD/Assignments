@@ -79,7 +79,7 @@ function scene:create( event )
         height = 200,
         -- setting Visual Properties
         defaultFile = "Images/Level1ScreenAlex.png",
-        overFile = "Images/Level1ScreenAlex.png",
+        overFile = "Images/level1ButtonPressed.png",
 
         -- set functional Properties
         onRelease = Level1Transition

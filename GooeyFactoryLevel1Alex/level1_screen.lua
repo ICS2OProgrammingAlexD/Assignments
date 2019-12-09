@@ -140,11 +140,6 @@ local function PositionIngredients()
     sugarPreviousX = sugar.x 
 end
 
--- Transitioning Function to YouWin screen
-local function YouWinTransitionLevel1( )
-    composer.gotoScene("you_win", {effect = "fade", time = 500})
-end
-
 local function TouchListenerFlour(touch)
     --only work if none of the other boxes have been touched
     if (butterAlreadyTouched == false) and 

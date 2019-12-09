@@ -74,6 +74,13 @@ local function BackToLevel1(  )
     composer.gotoScene("level1_screen", {effect = "fade", time = 500})
 end
 
+-- goes to you win screen
+local function YouWinTransition(  )
+    composer.gotoScene("you_win", {effect = "fromRight", time = 500})
+end
+
+-- goes to you Lose
+
 -- function shows cake everything
 local function ShowCake(  )
     bakedCake.isVisible = true
@@ -83,7 +90,13 @@ local function ShowCake(  )
     checkmark.isVisible = false
 
     -- call BackToLevel1 after 4 secs
-    timer.performWithDelay(4000, BackToLevel1)
+    if (cakesBaked == 3) then
+        cakesBakedTextObject.isVisible = false
+        cakesWreckedTextObject.isVisible = false
+        timer.performWithDelay(4000, YouWinTransition)
+    else
+        timer.performWithDelay(4000, BackToLevel1)
+    end
 end
 
 -- function show wrecked cake 
@@ -172,18 +185,7 @@ local function RestartScene()
     bakedCakeTextObject.isVisible = false
 
 
-    -- if they have 0 lives, go to the You Lose screen
-    if (lives == 0) then
-        composer.gotoScene("you_lose", {effect="fromRight", time=1000})
-    else 
-
-        DisplayAnswers()
-    end
-    if (numberCorrect == 3) then
-        composer.gotoScene("youWin", {effect="fromRight", time= 1000})
-    else
-        DisplayAnswers()
-    end
+    DisplayAnswers()
 end
 
 -- Functions that checks if the buttons have been clicked.
@@ -203,7 +205,7 @@ local function TouchListenerAnswer(touch)
             cakesBaked = cakesBaked + 1
             cakesBakedTextObject.text = "Cakes Baked: ".. tostring(cakesBaked)
             -- call ShowCake after 1 second
-            timer.performWithDelay( 1000, ShowCake )
+            timer.performWithDelay( 1500, ShowCake )
         end        
 
     end 
@@ -226,7 +228,7 @@ local function TouchListenerWrongAnswer1(touch)
             cakesWrecked = cakesWrecked + 1
             cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
             -- call ShowWreckedCake after 1 second
-            timer.performWithDelay( 1000, ShowWreckedCake )            
+            timer.performWithDelay( 1500, ShowWreckedCake )            
         end        
 
     end
@@ -250,7 +252,7 @@ local function TouchListenerWrongAnswer2(touch)
             cakesWrecked = cakesWrecked + 1
             cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
             -- call ShowWreckedCake after 1 second
-            timer.performWithDelay( 1000, ShowWreckedCake )            
+            timer.performWithDelay( 1500, ShowWreckedCake )            
         end        
     end
 end

@@ -25,18 +25,48 @@ sceneName = "you_win"
 local scene = composer.newScene( sceneName )
 
 -----------------------------------------------------------------------------------------
--- FORWARD REFERENCES
+-- FORWARD VARIABLES 
 -----------------------------------------------------------------------------------------
 
 -- local variables for the scene
 local bkgImage
-local youWinSound = audio.loadStream("Sounds/")
+local youWinImage
+local scrollSpeed = 10
+local scrollSpeed2 = 7
+local scrollSpeed3 = 7
+local restartButton
+local mainMenuButton
+
+-----------------------------------------------------------------------------------------
+-- LOCAL SOUNDS
+-----------------------------------------------------------------------------------------
+
+local youWinSound = audio.loadStream("Sounds/tada.mp3")
 local youWinSoundChannel
 
 ----------------------------------------------------------------------------------------
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
+-- animation for the You you_win
+local function AnimateYouWin( event )
+    youWinImage.x = youWinImage.x - scrollSpeed
+    if(youWinImage.x < -500) then
+        youWinImage.x = 1500
+    end
+end
+
+local function AnimateButtons( event )
+    restartButton.y = restartButton.y - scrollSpeed2
+    if(restartButton.y < display.contentHeight/3) then
+        scrollSpeed2 = 0
+    end
+    mainMenuButton.y = mainMenuButton.y - scrollSpeed3
+    if (mainMenuButton.y < display.contentHeight*9/10) then
+        scrollSpeed3 = 0
+    end
+end
+
 
 --------------------------------------------------------------------------------------
 -- The function called when the screen doesn't exist
@@ -46,14 +76,58 @@ function scene:create( event )
     local sceneGroup = self.view
 
     -- Display background
-    bkgImage = display.newImage("Images/")
+    bkgImage = display.newImage("Images/YouWinScreenForAlex.png")
     bkgImage.x = display.contentCenterX
     bkgImage.y = display.contentCenterY
     bkgImage.width = display.contentWidth
     bkgImage.height = display.contentHeight
-   
+
+    -- create youWinImage
+    youWinImage = display.newImage("Images/LevelCompleted.PNG")
+    youWinImage.x = display.contentWidth/2
+    youWinImage.y = display.contentHeight/2
+
+    restartButton = widget.newButton(
+    {
+        -- Set its position on the screen relative to the screen size
+        x = display.contentWidth/2,
+        y = display.contentHeight*1.25,
+
+        -- Insert the images here
+        defaultFile = "Images/RestartButtonUnpressedAlex.png",
+        overFile = "Images/RestartButtonPressedAlex.png",
+
+        -- height and width
+        width = 200,
+        height = 100,
+
+        -- go to the question
+        onRelease = QuestionTransition
+    } )
+
+    mainMenuButton = widget.newButton(
+    {
+        -- Set its position on the screen relative to the screen size
+        x = display.contentWidth/2,
+        y = display.contentHeight*1.25,
+
+        -- Insert the images here
+        defaultFile = "Images/MainMenuButtonUnpressedAlex.png",
+        overFile = "Images/MainMenuButtonPressedAlex.png",
+
+        -- height and width
+        width = 200,
+        height = 100,
+
+        -- go to the question
+        onRelease = QuestionTransition
+    } )
+
+
     -- Associating display objects with this scene 
     sceneGroup:insert( bkgImage )
+    sceneGroup:insert( youWinImage )
+    sceneGroup:insert( restartButton )
   
 end    
 
@@ -85,6 +159,14 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+        if(soundOn == true) then
+            youWinSoundChannel = audio.play(youWinSound, {channel = 5})
+        else
+            youWinSoundChannel = audio.play(youWinSound, {channel = 5})
+            audio.pause(youWinSoundChannel)
+        end
+        Runtime:addEventListener("enterFrame", AnimateYouWin)
+        Runtime:addEventListener("enterFrame", AnimateButtons)
 
     end
 
@@ -113,6 +195,10 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
         -- Called immediately after scene goes off screen.
+        audio.stop(youWinSoundChannel)
+        Runtime:removeEventListener("enterFrame", AnimateYouWin)
+        Runtime:removeEventListener("enterFrame", AnimateButtons)
+
     end
 
 end
