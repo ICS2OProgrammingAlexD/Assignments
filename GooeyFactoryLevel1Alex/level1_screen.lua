@@ -26,9 +26,15 @@ local scene = composer.newScene( sceneName )
 -----------------------------------------------------------------------------------------
 -- LOCAL VARIABLES
 -----------------------------------------------------------------------------------------
+cakeBaked = false
 
--- The background image and soccer ball for this scene
+-----------------------------------------------------------------------------------------
+-- LOCAL VARIABLES
+-----------------------------------------------------------------------------------------
+
+-- The background image and pause button for this scene
 local bkg_image
+local pauseButton
 
 --the text that displays the question
 local questionText 
@@ -36,11 +42,12 @@ local questionText
 -- Variables containing the user answer and the actual answer
 local userAnswer
 
--- boolean variables telling me which answer box was touched
+-- boolean variables telling me what was touched
 local flourAlreadyTouched = false
 local butterAlreadyTouched = false
 local eggsAlreadyTouched = false
 local sugarAlreadyTouched = false
+local pauseLevel1
 
 --create objects
 local flour
@@ -109,6 +116,18 @@ local function PositionIngredients()
     -- sugar
     sugar.y = display.contentHeight * 0.55
     sugar.x = display.contentWidth* 9 / 10
+
+    ---------------------------------------------------------
+    -- making things visible/invisible 
+    flour.isVisible = true
+    eggs.isVisible = true
+    butter.isVisible = true 
+    sugar.isVisible = true
+    bakeButton.isVisible = false
+    flourCheckmark.isVisible = false
+    eggsCheckmark.isVisible = false
+    butterCheckmark.isVisible = false
+    sugarCheckmark.isVisible = false
     ---------------------------------------------------------
     --remembering their positions to return the answer in case it's wrong
     butterPreviousY = butter.y
@@ -451,6 +470,10 @@ function scene:show( event )
         -- Called when the scene is now on screen.
         -- Insert code here to make the scene come alive.
         -- Example: start timers, begin animation, play audio, etc.
+        if (cakeBaked == true) then
+            cakesBaked = cakesBaked + 1
+            cakeBaked = false
+        end
         AddIngredientEventListeners() 
         PositionIngredients()
         if (soundOn == true) then

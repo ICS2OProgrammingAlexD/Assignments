@@ -68,8 +68,8 @@ local function CreditsTransition( )
 end 
 
 -- Creating Transition to Level1 Screen
-local function Level1ScreenTransition( )
-    composer.gotoScene( "level1_screen", {effect = "crossFade", time = 1000})
+local function LevelSelectTransition( )
+    composer.gotoScene( "level_select", {effect = "slideUp", time = 1000})
 end    
 
 --LOCAL FUNCTION THAT GOES TO INSTRUCTIONS SCREEN 
@@ -174,7 +174,7 @@ function scene:create( event )
             height = 100,
 
             -- When the button is released, call the Level1 screen transition function
-            onRelease = Level1ScreenTransition          
+            onRelease = LevelSelectTransition          
         } )
 
     -----------------------------------------------------------------------------------------
