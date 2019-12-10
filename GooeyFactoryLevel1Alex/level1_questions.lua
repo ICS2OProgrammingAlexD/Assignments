@@ -71,15 +71,18 @@ local wreckedCakeTextObject
 -----------------------------------------------------------------------------------------
 -- function that goes back to the level 1 screen when called
 local function BackToLevel1(  )
-    composer.gotoScene("level1_screen", {effect = "fade", time = 500})
+    composer.gotoScene("level1_screen", {effect = "fade", time = 500} )
 end
 
 -- goes to you win screen
 local function YouWinTransition(  )
-    composer.gotoScene("you_win", {effect = "fromRight", time = 500})
+    composer.gotoScene("you_win", {effect = "fromRight", time = 500} )
 end
 
 -- goes to you Lose
+local function YouLoseTransition(  )
+    composer.gotoScene("you_lose", {effect = "fromRight", time = 500} )
+end
 
 -- function shows cake everything
 local function ShowCake(  )
@@ -93,6 +96,8 @@ local function ShowCake(  )
     if (cakesBaked == 3) then
         cakesBakedTextObject.isVisible = false
         cakesWreckedTextObject.isVisible = false
+        cakesWrecked = 0
+        cakesBaked = 0
         timer.performWithDelay(4000, YouWinTransition)
     else
         timer.performWithDelay(4000, BackToLevel1)
@@ -111,14 +116,21 @@ local function ShowWreckedCake(  )
     redX1.isVisible = false
     redX2.isVisible = false
 
-    -- call BackToLevel1 after 4 secs
-    timer.performWithDelay(4000, BackToLevel1)
-
+    if (cakesWrecked == 3) then 
+        cakesBakedTextObject.isVisible = false
+        cakesWreckedTextObject.isVisible = false
+        cakesWrecked = 0
+        cakesBaked = 0
+        timer.performWithDelay(4000, YouLoseTransition)
+    else
+        -- call BackToLevel1 after 4 secs
+        timer.performWithDelay(4000, BackToLevel1)
+    end
 end
 
 -- Function that changes the answers for a new question and places them randomly in one of the positions
 local function DisplayAnswers( )
-    local randomQuestion = math.random(1, 2)
+    local randomQuestion = math.random(1, 3)
     if (randomQuestion == 1) then
         questionTextObject.text = "What is the strongest shape?"
         answerTextObject.text = "Triangle"
@@ -129,9 +141,17 @@ local function DisplayAnswers( )
         answerTextObject.text = "Blossom Tree"
         wrongAnswer1TextObject.text = "Oak Tree"
         wrongAnswer2TextObject.text = "Maple Tree"
+    elseif (randomQuestion == 3) then
+        questionTextObject.text = "What do plants need to grow?"
+        answerTextObject.text = "Water + sun + CO2"
+        checkmark.x = display.contentWidth/6
+        wrongAnswer1TextObject.text = "Water + Moonlight + Oxygen"
+        redX1.x = display.contentWidth/6
+        wrongAnswer2TextObject.text = "Juice + Moonlight + CO2"
+        redX2.x = display.contentWidth/6
     end
 
-    local answerPosition = math.random(1,3)
+    local answerPosition = math.random(1, 3)
     if (answerPosition == 1) then                
             answerTextObject.y = display.contentHeight*9/12  
             checkmark.y = display.contentHeight*9/12   

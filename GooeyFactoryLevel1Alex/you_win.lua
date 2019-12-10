@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
---
--- SceneTemplate.lua
--- Scene Template (Composer API)
---
+-- Name: Alex De Meo
+-- File: you_win.lua
+-- Class: ICS2O
+-- Description: You win screen for the CPT
 -----------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------
@@ -48,6 +48,14 @@ local youWinSoundChannel
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
+local function RestartTransition(  )
+    composer.gotoScene("level1_screen")
+end
+
+local function MainMenuTransition(  )
+    composer.gotoScene("main_menu")
+end
+
 -- animation for the You you_win
 local function AnimateYouWin( event )
     youWinImage.x = youWinImage.x - scrollSpeed
@@ -58,11 +66,11 @@ end
 
 local function AnimateButtons( event )
     restartButton.y = restartButton.y - scrollSpeed2
-    if(restartButton.y < display.contentHeight/3) then
+    if(restartButton.y < display.contentHeight*7/10) then
         scrollSpeed2 = 0
     end
     mainMenuButton.y = mainMenuButton.y - scrollSpeed3
-    if (mainMenuButton.y < display.contentHeight*9/10) then
+    if (mainMenuButton.y < display.contentHeight*11/13) then
         scrollSpeed3 = 0
     end
 end
@@ -102,7 +110,7 @@ function scene:create( event )
         height = 100,
 
         -- go to the question
-        onRelease = QuestionTransition
+        onRelease = RestartTransition
     } )
 
     mainMenuButton = widget.newButton(
@@ -120,7 +128,7 @@ function scene:create( event )
         height = 100,
 
         -- go to the question
-        onRelease = QuestionTransition
+        onRelease = MainMenuTransition
     } )
 
 
@@ -128,6 +136,7 @@ function scene:create( event )
     sceneGroup:insert( bkgImage )
     sceneGroup:insert( youWinImage )
     sceneGroup:insert( restartButton )
+    sceneGroup:insert( mainMenuButton)
   
 end    
 
