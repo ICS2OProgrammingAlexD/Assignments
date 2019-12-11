@@ -66,6 +66,8 @@ local wreckedCakeTextObject
 -----------------------------------------------------------------------------------------
 local clockSound = audio.loadStream("Sounds/clockticking.mp3")
 local clockSoundChannel
+local dingSound = audio.loadSound("Sounds/dingSound.mp3")
+local buzzSound = audio.loadSound("Sounds/buzzSound.mp3")
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -218,6 +220,8 @@ local function TouchListenerAnswer(touch)
             wrongAnswer2TextObject.isVisible = false
             checkmark.isVisible = true
             cakesBaked = cakesBaked + 1
+            audio.stop(clockSoundChannel)
+            audio.play(dingSound)
             if (cakesBaked == 3) then
                 cakesBakedTextObject.text = "Cakes Baked: 0"
                 cakesWreckedTextObject.text = "Cakes Wrecked: 0"
@@ -247,6 +251,8 @@ local function TouchListenerWrongAnswer1(touch)
             checkmark.isVisible = true
             redX1.isVisible = true
             cakesWrecked = cakesWrecked + 1
+            audio.stop(clockSoundChannel)
+            audio.play(buzzSound)
             if (cakesWrecked == 3) then
                 cakesWreckedTextObject.text = "Cakes Wrecked: 0" 
                 cakesBakedTextObject.text = "Cakes Baked: 0"
@@ -277,6 +283,8 @@ local function TouchListenerWrongAnswer2(touch)
             checkmark.isVisible = true
             redX2.isVisible = true
             cakesWrecked = cakesWrecked + 1
+            audio.stop(clockSoundChannel)
+            audio.play(buzzSound)
             if (cakesWrecked == 3) then
                 cakesWreckedTextObject.text = "Cakes Wrecked: 0" 
                 cakesBakedTextObject.text = "Cakes Baked: 0"
