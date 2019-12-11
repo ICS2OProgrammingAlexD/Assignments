@@ -64,7 +64,8 @@ local wreckedCakeTextObject
 -----------------------------------------------------------------------------------------
 -- SOUND
 -----------------------------------------------------------------------------------------
-
+local clockSound = audio.loadStream("Sounds/clockticking.mp3")
+local clockSoundChannel
 
 -----------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -96,8 +97,6 @@ local function ShowCake(  )
     if (cakesBaked == 3) then
         cakesBakedTextObject.isVisible = false
         cakesWreckedTextObject.isVisible = false
-        cakesWrecked = 0
-        cakesBaked = 0
         timer.performWithDelay(4000, YouWinTransition)
     else
         timer.performWithDelay(4000, BackToLevel1)
@@ -119,8 +118,6 @@ local function ShowWreckedCake(  )
     if (cakesWrecked == 3) then 
         cakesBakedTextObject.isVisible = false
         cakesWreckedTextObject.isVisible = false
-        cakesWrecked = 0
-        cakesBaked = 0
         timer.performWithDelay(4000, YouLoseTransition)
     else
         -- call BackToLevel1 after 4 secs
@@ -178,17 +175,6 @@ local function DisplayAnswers( )
     end
 end
 
-
--- Function that transitions to Lose Screen
-local function LoseScreenTransition( )        
-    composer.gotoScene( "you_lose", {effect = "zoomInOutFade", time = 1000})
-end 
-
--- function that transitions to win screen
-local function WinScreenTransition(  )
-    composer.gotoscene("youWin", {effect="fromRight", time= 1000})
-end
-
 local function RestartScene()
 
     alreadyClickedAnswer = false
@@ -203,6 +189,15 @@ local function RestartScene()
     questionTextObject.isVisible = true
     wreckedCakeTextObject.isVisible = false
     bakedCakeTextObject.isVisible = false
+    if (cakesWrecked == 3) then
+        cakesWrecked = 0
+        cakesBaked = 0
+    end
+
+    if (cakesBaked == 3) then
+        cakesBaked = 0 
+        cakesWrecked = 0
+    end
 
 
     DisplayAnswers()
@@ -223,7 +218,13 @@ local function TouchListenerAnswer(touch)
             wrongAnswer2TextObject.isVisible = false
             checkmark.isVisible = true
             cakesBaked = cakesBaked + 1
-            cakesBakedTextObject.text = "Cakes Baked: ".. tostring(cakesBaked)
+            if (cakesBaked == 3) then
+                cakesBakedTextObject.text = "Cakes Baked: 0"
+                cakesWreckedTextObject.text = "Cakes Wrecked: 0"
+            else
+                cakesBakedTextObject.text = "Cakes Baked: ".. tostring(cakesBaked)
+                cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
+            end
             -- call ShowCake after 1 second
             timer.performWithDelay( 1500, ShowCake )
         end        
@@ -246,7 +247,13 @@ local function TouchListenerWrongAnswer1(touch)
             checkmark.isVisible = true
             redX1.isVisible = true
             cakesWrecked = cakesWrecked + 1
-            cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
+            if (cakesWrecked == 3) then
+                cakesWreckedTextObject.text = "Cakes Wrecked: 0" 
+                cakesBakedTextObject.text = "Cakes Baked: 0"
+            else
+                cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
+                cakesBakedTextObject.text = "Cakes Baked: " .. tostring(cakesBaked)
+            end
             -- call ShowWreckedCake after 1 second
             timer.performWithDelay( 1500, ShowWreckedCake )            
         end        
@@ -270,7 +277,13 @@ local function TouchListenerWrongAnswer2(touch)
             checkmark.isVisible = true
             redX2.isVisible = true
             cakesWrecked = cakesWrecked + 1
-            cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
+            if (cakesWrecked == 3) then
+                cakesWreckedTextObject.text = "Cakes Wrecked: 0" 
+                cakesBakedTextObject.text = "Cakes Baked: 0"
+            else
+                cakesWreckedTextObject.text = "Cakes Wrecked: " .. tostring(cakesWrecked)
+                cakesBakedTextObject.text = "Cakes Baked: " .. tostring(cakesBaked)
+            end
             -- call ShowWreckedCake after 1 second
             timer.performWithDelay( 1500, ShowWreckedCake )            
         end        
@@ -314,6 +327,11 @@ function scene:create( event )
     bkgImage.y = display.contentCenterY
     bkgImage.width = display.contentWidth
     bkgImage.height = display.contentHeight
+
+    cakesBaked = 0
+
+    cakesWrecked = 0
+
 
     -- create the text object that will hold the add equation. Make it empty for now.
     questionTextObject = display.newText( "", display.contentWidth/2, display.contentHeight*2/5, nil, 65)
@@ -401,7 +419,15 @@ function scene:show( event )
     elseif ( phase == "did" ) then
 
         -- listeners to each of the answer text objects
-        AddTextObjectListeners()        
+        AddTextObjectListeners()  
+        cakesBakedTextObject.isVisible = true
+        cakesWreckedTextObject.isVisible = true      
+        if (soundOn == true) then
+            clockSoundChannel = audio.play(clockSound, {channel = 8, loops= -1} )
+        else
+            clockSoundChannel = audio.play(clockSound, {channel = 8, loops=-1 } )
+            audio.pause(clockSoundChannel)
+        end
 
         -- call the function to restart the scene
     end
@@ -428,6 +454,7 @@ function scene:hide( event )
         
         -- remove the listeners when leaving the scene
         RemoveTextObjectListeners()
+        audio.stop(clockSoundChannel)
 
     -----------------------------------------------------------------------------------------
 
