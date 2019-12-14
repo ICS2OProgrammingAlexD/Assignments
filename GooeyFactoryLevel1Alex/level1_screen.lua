@@ -1,8 +1,8 @@
 -----------------------------------------------------------------------------------------
 --
--- game_level1.lua
--- Created by: Daniel
--- Date: Nov. 22nd, 2014
+-- level1_screen.lua
+-- Created by: Alex De Meo
+-- Date: Dec. 6, 2019
 -- Description: This is the level 1 screen of the game.
 -----------------------------------------------------------------------------------------
 

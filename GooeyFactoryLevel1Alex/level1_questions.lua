@@ -2,7 +2,7 @@
 --
 -- level1_screen.lua
 -- By: Alex De Meo
--- Date: Oct. 28, 2019
+-- Date: Dec. 7, 2019
 -- Description: This is the level 1 question screen of the game.
 -----------------------------------------------------------------------------------------
 
