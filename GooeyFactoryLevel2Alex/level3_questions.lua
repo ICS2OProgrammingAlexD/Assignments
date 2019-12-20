@@ -22,7 +22,7 @@ local widget = require( "widget" )
 -----------------------------------------------------------------------------------------
 
 -- Naming Scene
-sceneName = "level2_questions"
+sceneName = "level3_questions"
 
 -----------------------------------------------------------------------------------------
 
@@ -73,8 +73,8 @@ local buzzSound = audio.loadSound("Sounds/buzzSound.mp3")
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 -- function that goes back to the level 1 screen when called
-local function BackToLevel1(  )
-    composer.gotoScene("level1_screen", {effect = "fade", time = 500} )
+local function BackToLevel3(  )
+    composer.gotoScene("level3_screen", {effect = "fade", time = 500} )
 end
 
 -- goes to you win screen
@@ -95,13 +95,13 @@ local function ShowCake(  )
     answerTextObject.isVisible = false
     checkmark.isVisible = false
 
-    -- call BackToLevel1 after 4 secs
-    if (cakesBaked == 3) then
+    -- call BackToLevel3 after 4 secs
+    if (cakesBaked == 5) then
         cakesBakedTextObject.isVisible = false
         cakesWreckedTextObject.isVisible = false
         timer.performWithDelay(4000, YouWinTransition)
     else
-        timer.performWithDelay(4000, BackToLevel1)
+        timer.performWithDelay(4000, BackToLevel3)
     end
 end
 
@@ -122,8 +122,8 @@ local function ShowWreckedCake(  )
         cakesWreckedTextObject.isVisible = false
         timer.performWithDelay(4000, YouLoseTransition)
     else
-        -- call BackToLevel1 after 4 secs
-        timer.performWithDelay(4000, BackToLevel1)
+        -- call BackToLevel3 after 4 secs
+        timer.performWithDelay(4000, BackToLevel3)
     end
 end
 
@@ -135,13 +135,17 @@ local function DisplayAnswers( )
         answerTextObject.text = "Positive and Negative"
         wrongAnswer1TextObject.text = "Left and Right"
         wrongAnswer2TextObject.text = "Red and Blue"
+        checkmark.x = display.contentWidth/6
+        redX1.x = display.contentWidth/6
+        redX2.x = display.contentWidth/6
+
     elseif (randomQuestion == 2) then
         questionTextObject.text = "What can magnets atract to?"
         answerTextObject.text = "Metal"
         wrongAnswer1TextObject.text = "Plastic"
         wrongAnswer2TextObject.text = "Wood"
     elseif (randomQuestion == 3) then
-        questionTextObject.text = "What part of the plant keeps it stable?"
+        questionTextObject.text = "  What part of the \n plant keeps it stable?"
         answerTextObject.text = "Stem"
         checkmark.x = display.contentWidth/6
         wrongAnswer1TextObject.text = "Leaves"
@@ -149,7 +153,7 @@ local function DisplayAnswers( )
         wrongAnswer2TextObject.text = "Branches"
         redX2.x = display.contentWidth/6
     elseif (randomQuestion == 4) then
-        questionTextObject.text = "Which one is a manmade structure?"
+        questionTextObject.text = "Which one is a \n manmade structure?"
         answerTextObject.text = "Table"
         wrongAnswer1TextObject.text = "Rocks"
         wrongAnswer2TextObject.text = "Soil"
@@ -159,11 +163,30 @@ local function DisplayAnswers( )
         wrongAnswer1TextObject.text = "Lava"
         wrongAnswer2TextObject.text = "Oil"
     elseif (randomQuestion == 6) then 
-        questionTextObject.text = "Which one is a manmade structure?"
+        questionTextObject.text = "Which one is a \n manmade structure?"
         answerTextObject.text = "Chair"
         wrongAnswer1TextObject.text = "Tree"
         wrongAnswer2TextObject.text = "Coal"
-
+    elseif (randomQuestion == 7) then
+        questionTextObject.text = "How do plants get their energy?"
+        answerTextObject.text = "Sunlight"
+        wrongAnswer1TextObject.text = "Water"
+        wrongAnswer2TextObject.text = "juice"
+    elseif (randomQuestion == 8) then
+        questionTextObject.text = "What is the sun?"
+        answerTextObject.text = "A Star"
+        wrongAnswer1TextObject.text = "A Planet"
+        wrongAnswer2TextObject.text = "An Asteroid"
+    elseif (randomQuestion == 9) then 
+        questionTextObject.text = "How many planets are \n in our solar system?"
+        answerTextObject.text = "Eight"
+        wrongAnswer1TextObject.text = "Nine"
+        wrongAnswer2TextObject.text = "Seven"
+    elseif (randomQuestion == 10) then 
+        questionTextObject.text = "What is the fourth planet \n  in our solar system?"
+        answerTextObject.text = "Round"
+        wrongAnswer1TextObject.text = "Flat"
+        wrongAnswer2TextObject.text = "A Cube"
     end
 
     local answerPosition = math.random(1, 3)
@@ -212,7 +235,7 @@ local function RestartScene()
         cakesBaked = 0
     end
 
-    if (cakesBaked == 3) then
+    if (cakesBaked == 5) then
         cakesBaked = 0 
         cakesWrecked = 0
     end
@@ -238,7 +261,7 @@ local function TouchListenerAnswer(touch)
             cakesBaked = cakesBaked + 1
             audio.stop(clockSoundChannel)
             audio.play(dingSound)
-            if (cakesBaked == 3) then
+            if (cakesBaked == 5) then
                 cakesBakedTextObject.text = "Cakes Baked: 0"
                 cakesWreckedTextObject.text = "Cakes Wrecked: 0"
             else

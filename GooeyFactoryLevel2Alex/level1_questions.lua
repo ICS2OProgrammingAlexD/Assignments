@@ -129,7 +129,7 @@ end
 
 -- Function that changes the answers for a new question and places them randomly in one of the positions
 local function DisplayAnswers( )
-    local randomQuestion = math.random(1, 6)
+    local randomQuestion = math.random(1, 10)
     if (randomQuestion == 1) then
         questionTextObject.text = "What is the strongest shape?"
         answerTextObject.text = "Triangle"
@@ -163,7 +163,26 @@ local function DisplayAnswers( )
         answerTextObject.text = "Round"
         wrongAnswer1TextObject.text = "Flat"
         wrongAnswer2TextObject.text = "A Cube"
-
+    elseif (randomQuestion == 7) then 
+        questionTextObject.text = "Which fruit grows on a vine?"
+        answerTextObject.text = "Grapes"
+        wrongAnswer1TextObject.text = "Apples"
+        wrongAnswer2TextObject.text = "Pears" 
+    elseif (randomQuestion == 8) then 
+        questionTextObject.text = "What do plants not need to grow?"
+        answerTextObject.text = "Oxygen"
+        wrongAnswer1TextObject.text = "Water"
+        wrongAnswer2TextObject.text = "Sunlight"
+    elseif (randomQuestion == 9) then
+        questionTextObject.text = "What do plants start off as?"
+        answerTextObject.text = "Seeds"
+        wrongAnswer1TextObject.text = "Leaves"
+        wrongAnswer2TextObject.text = "Roots"
+    elseif (randomQuestion == 10) then 
+        questionTextObject.text = "What do plants give off?"
+        answerTextObject.text = "Oxygen"
+        wrongAnswer1TextObject.text = "Helium"
+        wrongAnswer2TextObject.text = "Gold"
     end
 
     local answerPosition = math.random(1, 3)

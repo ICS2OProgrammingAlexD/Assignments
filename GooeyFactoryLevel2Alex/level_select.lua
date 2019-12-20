@@ -25,6 +25,7 @@ display.setStatusBar(display.HiddenStatusBar)
 local backButton
 local levelSelectText
 local level1Button
+local level3Button
 local level1Text
 
 ------------------------------------------------------------------------
@@ -32,12 +33,17 @@ local level1Text
 ----------------------------------------------------------------------
 -- Creating Transitioning Function back to main menu
 local function BackTransition( )
-    composer.gotoScene( "main_menu", {effect = "slideDown", time = 500})
+    composer.gotoScene( "main_menu", {effect = "slideDown", time = 500} )
 end
 
 -- create transition to level 1
 local function Level1Transition( )
-    composer.gotoScene("level1_screen", {effect= "fade", time = 500})
+    composer.gotoScene("level1_screen", {effect= "fade", time = 500} )
+end
+
+-- create transition to level 3
+local function Level3Transition(  )
+    composer.gotoScene("level3_screen", {effect= "fade", time = 500} )
 end
 
 -- function is called when the screen doesn't exist
@@ -71,7 +77,7 @@ function scene:create( event )
     level1Button = widget.newButton(
     {
         -- setting the Position
-        x = display.contentWidth/2,
+        x = display.contentWidth/3,
         y = display.contentHeight/2,
 
         -- set Dimensions
@@ -85,19 +91,43 @@ function scene:create( event )
         onRelease = Level1Transition
     } )
 
+    -- create level 3 buttons
+    level3Button = widget.newButton(
+    {
+        -- setting its position 
+        x = display.contentWidth*2/3,
+        y = display.contentHeight/2,
+
+        -- set dimensions 
+        width = 200, 
+        height = 200,
+
+        -- setting the visual properties 
+        defaultFile = "Images/Level3ScreenAlex.png",
+        overFile = "Images/Level3ButtonAlex.png",
+
+        -- set functional properties
+        onRelease = Level3Transition
+    } )
+
     -- create levelSelectText
     levelSelectText = display.newText("LEVELS", display.contentWidth/2, display.contentHeight/5, nil, 100)
     levelSelectText:setTextColor(0, 0, 0)
 
     -- create level1Text
-    level1Text = display.newText("Level 1", display.contentWidth/2, display.contentHeight*2/3, nil, 60)
+    level1Text = display.newText("Level 1", display.contentWidth/3, display.contentHeight*2/3, nil, 60)
     level1Text:setTextColor(0, 0, 0)
+
+    level3Text = display.newText("Level 3", display.contentWidth*2/3, display.contentHeight*2/3, nil, 60)
+    level3Text:setTextColor(0, 0, 0)
 
     -- add buttons, objects and images to sceneGroup
     sceneGroup:insert( backButton )
     sceneGroup:insert( levelSelectText )
-    sceneGroup:insert( level1Button)
-    sceneGroup:insert( level1Text)
+    sceneGroup:insert( level1Button )
+    sceneGroup:insert( level1Text )
+    sceneGroup:insert( level3Button )
+    sceneGroup:insert( level3Text )
 
 
 end

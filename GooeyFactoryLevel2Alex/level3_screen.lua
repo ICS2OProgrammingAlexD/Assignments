@@ -22,7 +22,7 @@ local widget = require( "widget" )
 
 
 -- Naming Scene
-sceneName = "level2_screen"
+sceneName = "level3_screen"
 
 -- Creating Scene Object
 local scene = composer.newScene( sceneName )
@@ -88,7 +88,7 @@ local splashSound = audio.loadSound("Sounds/splash.mp3")
 -- LOCAL FUNCTIONS
 -----------------------------------------------------------------------------------------
 local function QuestionTransition()
-    composer.gotoScene("level1_questions", {effect = "fade", time = 500} )
+    composer.gotoScene("level3_questions", {effect = "fade", time = 500} )
 end
 -- show the bake button to allow the player to bake the cake
 local function ShowBakeButton()
@@ -349,7 +349,7 @@ function scene:create( event )
     ----------------------------------------------------------------------------------
 
     -- Insert the background image
-    bkg_image = display.newImageRect("Images/Level1ScreenAlex.png", 1024, 768)
+    bkg_image = display.newImageRect("Images/Level3ScreenAlex.png", 1024, 768)
     bkg_image.anchorX = 0
     bkg_image.anchorY = 0
     bkg_image.width = display.contentWidth
